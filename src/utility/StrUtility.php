@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace PhpStringHelpers\utility;
 
+use src\exceptions\UrlIsNotValidException;
+use src\exceptions\FileDoesNotExistsException;
+
 class StrUtility
 {
 	const REGULAR_WORDS_PATTERN = '/[^a-z0-9]/im';
@@ -85,13 +88,11 @@ class StrUtility
 		$filePath = self::path('lang.' . $fileName);
 
 		if (!is_file($filePath) || !file_exists($filePath))
-			// throw new FileDoesNotExistsException("file does not exist");
-			return 'no found';
+			throw new FileDoesNotExistsException("File Does Not Exist");
 
 		$data = require_once $filePath;
 
 		if (!is_array($data))
-			// throw file data is not array ...
 			$data = [];
 
 		if (!key_exists($key, $data))
@@ -115,8 +116,7 @@ class StrUtility
 		$filePath = $path . '.' . strtolower($pathExtension);
 
 		if (!is_file($filePath) || !file_exists($filePath))
-			// throw new FileDoesNotExistsException("file does not exist");
-			return 'no found';
+			throw new FileDoesNotExistsException("File Does Not Exist");
 
 		return $filePath;
 	}
@@ -242,8 +242,8 @@ class StrUtility
 		$href = filter_var(trim($href), FILTER_SANITIZE_URL);
 
 		if (!filter_var($href, FILTER_VALIDATE_URL))
-			// throw exception
-			return "url is not valid";
+			throw new UrlIsNotValidException('Url Is Not Valid');
+
 		return "<a href=$href>" . self::clearString($content) . '</a>';
 	}
 
