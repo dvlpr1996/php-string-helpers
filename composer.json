@@ -31,7 +31,10 @@
 	"autoload": {
 		"psr-4": {
 			"PhpStringHelpers\\": "src/"
-		}
+		},
+		"files": [
+			"./src/PhpStringHelpers.php"
+		]
 	},
 	"autoload-dev": {
 		"psr-4": {

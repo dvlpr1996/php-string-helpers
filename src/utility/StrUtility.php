@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace PhpStringHelpers\utility;
@@ -167,7 +166,7 @@ class StrUtility
 		return mt_rand(0, 255) . '.' . mt_rand(0, 255) . '.' . mt_rand(0, 255);
 	}
 
-	public static function rmLink(string $string)
+	public static function rmLink(string $string): string
 	{
 		$pattern = '[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$.]/i';
 		$string = trim(preg_replace('/(https?|ftp|file|mailto|tel):\/?\/?' . $pattern, '', $string));
@@ -257,28 +256,28 @@ class StrUtility
 		return mb_check_encoding($string, 'UTF-8');
 	}
 
-	public static function rmDuplicateWords(string $string)
+	public static function rmDuplicateWords(string $string): string
 	{
 		$string = preg_replace('/[\W]/i', ' ', strtolower($string));
 		$string = array_unique(explode(' ', $string));
 		return self::rmExtraBlank(implode(' ', $string));
 	}
 
-	public static function rmRightChar(string $words, int $num)
+	public static function rmRightChar(string $words, int $num): string
 	{
 		$characters = str_split(trim($words), 1);
 		$characters = array_splice($characters, 0, -$num);
 		return implode('', $characters);
 	}
 
-	public static function rmLeftChar(string $words, int $num)
+	public static function rmLeftChar(string $words, int $num): string
 	{
 		$characters = str_split(trim($words), 1);
 		$characters = array_splice($characters, $num, count($characters));
 		return implode('', $characters);
 	}
 
-	public static function rmChar(string $words, int $num)
+	public static function rmChar(string $words, int $num): string
 	{
 		$words = self::rmLeftChar($words, $num);
 		return self::rmRightChar($words, $num);
@@ -366,7 +365,7 @@ class StrUtility
 		return iconv(mb_detect_encoding($string, mb_detect_order(), true), "UTF-8", $string);
 	}
 
-	public static function incrementBy(string $string, ?string $separator = null)
+	public static function incrementBy(string $string, ?string $separator = null): string
 	{
 		$separator = $separator ?: null;
 		$numberPart = self::getLastNumbers($string);
@@ -380,7 +379,7 @@ class StrUtility
 		return $stringPart . $separator . (string)$numberPart;
 	}
 
-	public static function decrementBy(string $string, ?string $separator = null)
+	public static function decrementBy(string $string, ?string $separator = null): string
 	{
 		$separator = $separator ?: null;
 		$numberPart = self::getLastNumbers($string);
