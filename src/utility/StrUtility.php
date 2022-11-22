@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace PhpStringHelpers\utility;
 
-use src\exceptions\UrlIsNotValidException;
-use src\exceptions\FileDoesNotExistsException;
+use PhpStringHelpers\exceptions\UrlIsNotValidException;
+use PhpStringHelpers\exceptions\FileDoesNotExistsException;
+use PhpStringHelpers\exceptions\LanguageFileIsNotArrayException;
 
 class StrUtility
 {
-    const REGULAR_WORDS_PATTERN = '/[^a-z0-9]/im';
+    const REGULAR_WORDS_PATTERN = '/[^a-zA-Z0-9]/i';
 
     private static function regularWords(string $words)
     {
@@ -18,12 +19,12 @@ class StrUtility
 
     public static function toCamelCase(string $words): string
     {
-        return str_replace(' ', '', lcfirst(ucwords(self::regularWords($words))));
+        return str_replace(' ', '', lcfirst(ucwords(strtolower(self::regularWords($words)))));
     }
 
     public static function toPascalCase(string $words): string
     {
-        return str_replace(' ', '', ucwords(self::regularWords($words)));
+        return str_replace(' ', '', ucwords(strtolower(self::regularWords($words))));
     }
 
     public static function toKebabCase(string $words): string
@@ -33,7 +34,7 @@ class StrUtility
 
     public static function toTitleCase(string $words): string
     {
-        return preg_replace('/\s+/', ' ', ucwords(self::regularWords($words)));
+        return preg_replace('/\s+/', ' ', ucwords(strtolower(self::regularWords($words))));
     }
 
     public static function toConstant(string $words): string
@@ -53,26 +54,26 @@ class StrUtility
 
     public static function toAdaCase(string $words): string
     {
-        return preg_replace('/\s+/', '_', ucwords(self::regularWords($words)));
+        return preg_replace('/\s+/', '_', ucwords(strtolower(self::regularWords($words))));
     }
 
     public static function dotNotation(string $words): string
     {
-        return preg_replace('/\s+/', '.', ucwords(self::regularWords($words)));
+        return preg_replace('/\s+/', '.', strtolower(self::regularWords($words)));
     }
 
-    public static    function entitiesWrapper(string | int $data): string
+    public static function entitiesWrapper(string | int | null $data): string
     {
         return htmlspecialchars($data ?? '', ENT_QUOTES, 'UTF-8');
     }
 
     public static function toSlug(string $string): string
     {
-        $string =  preg_replace('/[^\pL\d]+/i', '-', $string);
-        return     trim(strtolower(preg_replace('/-+/', '-', $string)), '-');
+        $string = preg_replace('/[^\pL\d]+/i', '-', $string);
+        return trim(strtolower(preg_replace('/-+/', '-', $string)), '-');
     }
 
-    public static function rmAllBlank(string $words): string
+    public static function rmAllBlanks(string $words): string
     {
         return preg_replace('/[\s]/', '', $words);
     }
@@ -83,9 +84,10 @@ class StrUtility
         return is_null($returnString) ? 'not defined' : self::clearString($returnString);
     }
 
-    public static function translate(string $key, string $replace = '', string $fileName = 'en'): string
+    public static function translate(string $key, string $replace = '', string $dirName = 'en'): string
     {
-        $filePath = self::path('lang.' . $fileName);
+        $fileName = explode('.', $key);
+        $filePath = self::filePath('lang.' . $dirName . '.' . $fileName[0]);
 
         if (!is_file($filePath) || !file_exists($filePath))
             throw new FileDoesNotExistsException("File Does Not Exist");
@@ -93,7 +95,7 @@ class StrUtility
         $data = require_once $filePath;
 
         if (!is_array($data))
-            $data = [];
+            throw new LanguageFileIsNotArrayException("File data should be array");
 
         if (!key_exists($key, $data))
             return html_entity_decode(htmlentities($replace));
@@ -110,9 +112,9 @@ class StrUtility
         return str_pad($string, $len, $wrapper, STR_PAD_BOTH);
     }
 
-    public static function path(string $path, string $pathExtension = 'php'): string
+    public static function filePath(string $path, string $pathExtension = 'php'): string
     {
-        $path = getcwd() . '/../' . str_replace(".", "/", implode(".", explode('.', $path)));
+        $path = getcwd() . '/' . str_replace(".", "/", implode(".", explode('.', $path)));
         $filePath = $path . '.' . strtolower($pathExtension);
 
         if (!is_file($filePath) || !file_exists($filePath))
@@ -143,10 +145,10 @@ class StrUtility
 
     public static function pureString(string $data): string
     {
-        return trim(preg_replace('/[^\pL\d]+/', ' ', $data));
+        return self::rmExtraBlank(trim(preg_replace('/[^\pL]+/', ' ', $data)));
     }
 
-    public static function randomWords(int $size = 5): string
+    public static function randomChar(int $size = 5): string
     {
         $alphabet = str_shuffle('abcdefghijklmnopqrstuvwxyz');
         $words = '';
@@ -167,17 +169,29 @@ class StrUtility
         return mt_rand(0, 255) . '.' . mt_rand(0, 255) . '.' . mt_rand(0, 255);
     }
 
-    public static function rmLink(string $string): string
+    public static function rmLink(string $link): string
     {
-        $pattern = '[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$.]/i';
-        $string = trim(preg_replace('/(https?|ftp|file|mailto|tel):\/?\/?' . $pattern, '', $string));
-        return preg_replace('/(www|localhost).' . $pattern, '', $string);
+        $pattern = '[-a-zA-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Za-z0-9+&@#\/%=~_|$.]/i';
+        $protocols = 'https?|ftp|file|mailto|tel';
+
+        $link = trim(preg_replace('/(' . $protocols . '):\/?\/?' . $pattern, '', $link));
+        $link = preg_replace('/(www|localhost).' . $pattern, '', $link);
+        $link = preg_replace('/(\d+\.){3}\d\/?' . $pattern, '', $link);
+        $link = preg_replace('/(\d+\.){3}\d\/?/i', '', $link);
+        $link = preg_replace('/(\w+\.).' . $pattern, '', $link);
+
+        return self::rmExtraBlank($link);
     }
 
     public static function limitChar(string|int $string, int $length): string
     {
         $string = (string)$string;
-        return mb_strimwidth(trim($string), 0, $length + 3, '...');
+
+        if (strlen($string) <= $length)
+            return $string;
+
+        return self::rmRightChar($string, $length) . '...';
+        // return mb_strimwidth(trim($string), 0, $length + 3, '...');
     }
 
     public static function generateId(
@@ -259,13 +273,14 @@ class StrUtility
 
     public static function rmDuplicateWords(string $string): string
     {
-        $string = preg_replace('/[\W]/i', ' ', strtolower($string));
-        $string = array_unique(explode(' ', $string));
+        $string = array_unique(explode(' ', strtolower($string)));
         return self::rmExtraBlank(implode(' ', $string));
     }
 
     public static function rmRightChar(string $words, int $num): string
     {
+        if (strlen($words) < $num)
+            return $words;
         $characters = str_split(trim($words), 1);
         $characters = array_splice($characters, 0, -$num);
         return implode('', $characters);
@@ -273,12 +288,15 @@ class StrUtility
 
     public static function rmLeftChar(string $words, int $num): string
     {
+        if (strlen($words) < $num)
+            return $words;
+            
         $characters = str_split(trim($words), 1);
         $characters = array_splice($characters, $num, count($characters));
         return implode('', $characters);
     }
 
-    public static function rmChar(string $words, int $num): string
+    public static function rmBothSideChar(string $words, int $num): string
     {
         $words = self::rmLeftChar($words, $num);
         return self::rmRightChar($words, $num);
@@ -319,15 +337,18 @@ class StrUtility
 
     public static function lastWord(string $string): string
     {
-        $string = trim($string);
-        $lastWordStart = strrpos($string, ' ') + 1;
-        return substr($string, $lastWordStart);
+        if (empty($string))
+            return '';
+
+        if (strrpos(trim($string), ' ') === false)
+            return $string;
+
+        return substr($string, strrpos(trim($string), ' ') + 1);
     }
 
     public static function firstWord(string $string): string
     {
-        $string = trim($string);
-        $firstWordStart = strpos($string, ' ');
+        $firstWordStart = strpos(trim($string), ' ');
 
         if ($firstWordStart !== false)
             return substr($string, 0, $firstWordStart);
@@ -353,17 +374,18 @@ class StrUtility
 
     public static function rmBeginningNumbers(string $string): string
     {
-        return self::rmExtraBlank(preg_replace('/\b\d+/i', ' ', strtolower($string)));
+        return self::rmExtraBlank(preg_replace('/\b\d+/i', '', trim($string)));
     }
 
-    public static function rmFinalNumbers(string $string): string
+    public static function rmEndingNumbers(string $string): string
     {
-        return self::rmExtraBlank(preg_replace('/\d+\b/i', ' ', strtolower($string)));
+        return self::rmExtraBlank(preg_replace('/\d+\b/i', '', trim($string)));
     }
 
-    public static function convertToUtf8(string $string): string
+    public static function convertToUtf8(string $string): string|bool
     {
-        return iconv(mb_detect_encoding($string, mb_detect_order(), true), "UTF-8", $string);
+        $converter = iconv(mb_detect_encoding($string, mb_detect_order(), true), "UTF-8", $string);
+        return $converter ? $converter : false;
     }
 
     public static function incrementBy(string $string, ?string $separator = null): string

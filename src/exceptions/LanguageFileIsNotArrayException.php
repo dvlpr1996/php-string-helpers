@@ -4,7 +4,7 @@ namespace PhpStringHelpers\exceptions;
 
 use Exception;
 
-class UrlIsNotValidException extends Exception
+class LanguageFileIsNotArrayException extends Exception
 {
     public function __construct(string $message, int $statusCode = 500)
     {

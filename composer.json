@@ -1,48 +1,49 @@
 {
-	"name": "dvlpr1996/php-string-helpers",
-	"description": "some useful php string helpers",
-	"keywords": [
-		"php",
-		"string",
-		"helpers",
-		"php-string-helpers"
-	],
-	"homepage": "https://github.com/dvlpr1996/php-string-helpers",
-	"license": "MIT",
-	"type": "library",
-	"authors": [
-		{
-			"name": "Nima",
-			"email": "nimajahanbakhshian@gmail.com",
-			"role": "Developer"
-		}
-	],
-	"support": {
-		"issues": "https://github.com/dvlpr1996/php-string-helpers/issues",
-		"source": "https://github.com/dvlpr1996/php-string-helpers"
-	},
-	"require": {
-		"php": "^8.0"
-	},
-	"require-dev": {
-		"symfony/var-dumper": "^6.0",
-		"phpunit/phpunit": "^9.5"
-	},
-	"autoload": {
-		"psr-4": {
-			"PhpStringHelpers\\": "src/"
-		},
-		"files": [
-			"./src/PhpStringHelpers.php"
-		]
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"PhpStringHelpers\\Tests\\": "tests/"
-		}
-	},
-	"scripts": {
-		"test": "vendor/bin/phpunit",
-		"test-coverage": "vendor/bin/phpunit --coverage-html coverage"
-	}
+    "name": "dvlpr1996/php-string-helpers",
+    "description": "some useful php string helpers",
+    "keywords": [
+        "php",
+        "string",
+        "helpers",
+        "php-string-helpers"
+    ],
+    "homepage": "https://github.com/dvlpr1996/php-string-helpers",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Nima",
+            "email": "nimajahanbakhshian@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/dvlpr1996/php-string-helpers/issues",
+        "source": "https://github.com/dvlpr1996/php-string-helpers"
+    },
+    "require": {
+        "php": "^8.0"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.0",
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "PhpStringHelpers\\": "src/"
+        },
+        "files": [
+            "./src/PhpStringHelpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhpStringHelpers\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "minimum-stability": "dev"
 }

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 use PhpStringHelpers\utility\StrUtility as strHelpers;
@@ -81,10 +80,10 @@ if (!function_exists('toSlug')) {
     }
 }
 
-if (!function_exists('rmAllBlank')) {
-    function rmAllBlank(string $words): string
+if (!function_exists('rmAllBlanks')) {
+    function rmAllBlanks(string $words): string
     {
-        return strHelpers::rmAllBlank($words);
+        return strHelpers::rmAllBlanks($words);
     }
 }
 
@@ -109,10 +108,10 @@ if (!function_exists('wrapper')) {
     }
 }
 
-if (!function_exists('path')) {
-    function path(string $path, string $pathExtension = 'php'): string
+if (!function_exists('filePath')) {
+    function filePath(string $path, string $pathExtension = 'php'): string
     {
-        return strHelpers::path($path, $pathExtension);
+        return strHelpers::filePath($path, $pathExtension);
     }
 }
 
@@ -137,17 +136,10 @@ if (!function_exists('pureString')) {
     }
 }
 
-if (!function_exists('randomWords')) {
-    function randomWords(int $size = 5): string
+if (!function_exists('randomChar')) {
+    function randomChar(int $size = 5): string
     {
-        return strHelpers::randomWords($size);
-    }
-}
-
-if (!function_exists('randomWords')) {
-    function randomWords(int $size = 5): string
-    {
-        return strHelpers::randomWords($size);
+        return strHelpers::randomChar($size);
     }
 }
 
@@ -266,10 +258,10 @@ if (!function_exists('rmLeftChar')) {
     }
 }
 
-if (!function_exists('rmChar')) {
-    function rmChar(string $words, int $num): string
+if (!function_exists('rmBothSideChar')) {
+    function rmBothSideChar(string $words, int $num): string
     {
-        return strHelpers::rmChar($words, $num);
+        return strHelpers::rmBothSideChar($words, $num);
     }
 }
 
@@ -329,10 +321,10 @@ if (!function_exists('rmBeginningNumbers')) {
     }
 }
 
-if (!function_exists('rmFinalNumbers')) {
-    function rmFinalNumbers(string $string): string
+if (!function_exists('rmEndingNumbers')) {
+    function rmEndingNumbers(string $string): string
     {
-        return strHelpers::rmFinalNumbers($string);
+        return strHelpers::rmEndingNumbers($string);
     }
 }
 
