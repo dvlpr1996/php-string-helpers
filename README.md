@@ -1,8 +1,8 @@
 # helpful set of PHP string helper functions & utilities class
 
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/dvlpr1996/php-string-helpers.svg?style=flat-square)](https://packagist.org/packages/dvlpr1996/php-string-helpers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/dvlpr1996/php-string-helpers?style=flat)](https://packagist.org/packages/dvlpr1996/php-string-helpers)
 [![Total Downloads](https://img.shields.io/packagist/dt/dvlpr1996/php-string-helpers.svg?style=flat-square)](https://packagist.org/packages/dvlpr1996/php-string-helpers)
 
 All function helpers will be enabled by default (if those functions haven't already been defined).
@@ -17,7 +17,7 @@ also you can use them as utilities class.
 You can install the package via composer:
 
 ```bash
-.....................................
+composer require dvlpr1996/php-string-helpers
 ```
 
 ## StrUtility usage
