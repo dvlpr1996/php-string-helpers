@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * @Package: some useful php string helper Functions
+ * @Author : Nima jahan bakhshian / dvlpr1996 <nimajahanbakhshian@gmail.com>
+ * @URL    : https://github.com/dvlpr1996
+ * @License: MIT License Copyright (c) 2022 (until present) Nima jahan bakhshian
+ */
+
 declare(strict_types=1);
 
 use PhpStringHelpers\utility\StrUtility as strHelpers;
@@ -67,7 +75,7 @@ if (!function_exists('dotNotation')) {
 }
 
 if (!function_exists('entitiesWrapper')) {
-    function entitiesWrapper(string | int $data): string
+    function entitiesWrapper($data): string
     {
         return strHelpers::entitiesWrapper($data);
     }
@@ -81,23 +89,23 @@ if (!function_exists('toSlug')) {
 }
 
 if (!function_exists('rmAllBlanks')) {
-    function rmAllBlanks(string $words): string
+    function rmAllBlanks(string $string): string
     {
-        return strHelpers::rmAllBlanks($words);
+        return strHelpers::rmAllBlanks($string);
     }
 }
 
 if (!function_exists('alternate')) {
-    function alternate(?string $string, string $alternate = null): string
+    function alternate(?string $string, ?string $alternate = null): string
     {
         return strHelpers::alternate($string, $alternate);
     }
 }
 
 if (!function_exists('translate')) {
-    function translate(string $key, string $replace = '', string $fileName = 'en'): string
+    function translate(string $key, string $replace = '', string $dirName  = 'en'): string
     {
-        return strHelpers::translate($key, $replace, $fileName);
+        return strHelpers::translate($key, $replace, $dirName);
     }
 }
 
@@ -329,7 +337,7 @@ if (!function_exists('rmEndingNumbers')) {
 }
 
 if (!function_exists('convertToUtf8')) {
-    function convertToUtf8(string $string): string
+    function convertToUtf8(string $string): string|bool
     {
         return strHelpers::convertToUtf8($string);
     }
