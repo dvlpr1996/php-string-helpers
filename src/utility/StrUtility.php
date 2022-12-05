@@ -196,6 +196,7 @@ class StrUtility
     public static function translate(string $key, string $replace = '', string $dirName = 'en'): string
     {
         $fileName = explode('.', $key);
+        $key = $fileName[1];
         $filePath = self::filePath('lang.' . $dirName . '.' . $fileName[0]);
 
         if (!is_file($filePath) || !file_exists($filePath))
@@ -240,11 +241,14 @@ class StrUtility
      */
     public static function filePath(string $path, string $pathExtension = 'php'): string
     {
-        $path = getcwd() . '/' . str_replace(".", "/", implode(".", explode('.', $path)));
+
+        $path = $_SERVER['DOCUMENT_ROOT'] .
+            str_replace('.', '/', implode('.', explode('.', $path)));
+
         $filePath = $path . '.' . strtolower($pathExtension);
 
         if (!is_file($filePath) || !file_exists($filePath))
-            throw new FileDoesNotExistsException("File Does Not Exist");
+            throw new FileDoesNotExistsException('File Does Not Exist');
 
         return $filePath;
     }

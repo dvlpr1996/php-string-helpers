@@ -203,7 +203,7 @@ class StrUtilityTest extends TestCase
 
     public function testTranslateCanReturnStringData()
     {
-        $string = strHelpersTest::translate('auth.user_name');
+        $string = strHelpersTest::translate('app.title');
         $this->assertIsString($string);
     }
 
@@ -219,23 +219,17 @@ class StrUtilityTest extends TestCase
         $string = strHelpersTest::translate('app.title');
     }
 
-    public function testTranslateCanReturnReplaceParamIfKeyDoesNotExists()
-    {
-        $string = strHelpersTest::translate('app.Title', 'laravel');
-        $this->assertEquals('laravel', $string);
-    }
-
     public function testFilePathCanReturnStringValue()
     {
-        $filePath = strHelpersTest::filePath('lang.en.auth.auth');
+        $filePath = strHelpersTest::filePath('lang.en.app');
         $this->assertIsString($filePath);
     }
 
-    public function testFilePathReturnedFilePathIsExists()
+    public function testFilePathReturnedFilePathIfExists()
     {
-        $filePath = strHelpersTest::filePath('lang.en.auth.auth');
+        $filePath = strHelpersTest::filePath('lang.en.app');
         $this->assertFileExists($filePath);
-        $this->assertFileEquals('lang/en/auth/auth.php', $filePath);
+        $this->assertFileEquals('lang/en/app.php', $filePath);
         $this->assertFileIsReadable($filePath);
     }
 
@@ -361,13 +355,13 @@ class StrUtilityTest extends TestCase
     public function testLimitCharCanLimitGivenString()
     {
         $string = strHelpersTest::limitChar('foo bar', 2);
-        $this->assertEquals('foo b...',$string);
+        $this->assertEquals('foo b...', $string);
     }
 
     public function testLimitCharCanReturnGivenStringIfLengthParamIsBiggerThanStringLength()
     {
         $string = strHelpersTest::limitChar('foo bar', 8);
-        $this->assertEquals('foo bar',$string);
+        $this->assertEquals('foo bar', $string);
     }
 
     public function testGenerateIdCanReturnStringValue()
