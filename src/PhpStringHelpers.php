@@ -103,9 +103,16 @@ if (!function_exists('alternate')) {
 }
 
 if (!function_exists('translate')) {
-    function translate(string $key, string $replace = '', string $dirName  = 'en'): string
+    function translate(string $key, string $replace = ''): string
     {
-        return strHelpers::translate($key, $replace, $dirName);
+        return strHelpers::translate($key, $replace);
+    }
+}
+
+if (!function_exists('translatePath')) {
+    function translatePath(string $baseAppPath, string $dirName): string
+    {
+        return strHelpers::translatePath($baseAppPath, $dirName);
     }
 }
 
@@ -354,5 +361,26 @@ if (!function_exists('decrementBy')) {
     function decrementBy(string $string, ?string $separator = null): string
     {
         return strHelpers::decrementBy($string, $separator);
+    }
+}
+
+if (!function_exists('rmLastWord')) {
+    function rmLastWord(string $string): string
+    {
+        return strHelpers::rmLastWord($string);
+    }
+}
+
+if (!function_exists('rmFirstWord')) {
+    function rmFirstWord(string $string): string
+    {
+        return strHelpers::rmFirstWord($string);
+    }
+}
+
+if (!function_exists('is_slug')) {
+    function is_slug(string $slug): bool
+    {
+        return strHelpers::is_slug($slug);
     }
 }

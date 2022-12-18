@@ -15,6 +15,7 @@ namespace PhpStringHelpers\utility;
 use PhpStringHelpers\exceptions\UrlIsNotValidException;
 use PhpStringHelpers\exceptions\FileDoesNotExistsException;
 use PhpStringHelpers\exceptions\LanguageFileIsNotArrayException;
+use PHPUnit\Util\Json;
 
 class StrUtility
 {
@@ -126,7 +127,7 @@ class StrUtility
      */
     public static function dotNotation(string $words): string
     {
-        return preg_replace('/\s+/', '.', strtolower(self::regularWords($words)));
+        return preg_replace('/\s+/', '.', self::regularWords($words));
     }
 
     /**
@@ -179,28 +180,23 @@ class StrUtility
 
     /**
      * translation methods
-     * must create lang folder in root of project
-     * lang/en
+     * create lang folder in root of your project
+     * then create wrapper function or method based on documentation
      *
-     * @param string $key fileName.keyName |
-     * translate('app.title') reference to lang/en/app.php and
+     * @param string $key |
+     * <your custom wrapper>('app.title') reference to ./lang/en/app.php and
      * title array key in app.php file
      * @param string $replace
      * [optional]
-     * @param string $dirName
-     * [optional] default directory name is en
      * @return string
      * @throws FileDoesNotExistsException
      * @throws LanguageFileIsNotArrayException
      */
-    public static function translate(string $key, string $replace = '', string $dirName = 'en'): string
+    public static function translate(string $key, string $replace = ''): string
     {
         $fileName = explode('.', $key);
         $key = $fileName[1];
-        $filePath = self::filePath('lang.' . $dirName . '.' . $fileName[0]);
-
-        if (!is_file($filePath) || !file_exists($filePath))
-            throw new FileDoesNotExistsException("File Does Not Exist");
+        $filePath = self::filePath($fileName[0]);
 
         $data = require_once $filePath;
 
@@ -211,6 +207,19 @@ class StrUtility
             return html_entity_decode(htmlentities($replace));
 
         return html_entity_decode(htmlentities($data[$key]));
+    }
+
+    /**
+     * translate Path resolver
+     *
+     * @param string $baseAppPath
+     * base path of your app
+     * @param string $dirName
+     * @return string
+     */
+    public static function translatePath(string $baseAppPath, string $dirName): string
+    {
+        return $baseAppPath . '/lang/' . $dirName . '/';
     }
 
     /**
@@ -230,10 +239,11 @@ class StrUtility
     }
 
     /**
-     * return path of file from root of project
+     * return path of file
      *
      * @param string $path
-     * path to the file like foo.bar.baz
+     * path to the file from root of the project
+     * accept dot notation case
      * @param string $pathExtension
      * [optional] declare file extension default is php file extension
      * @return string
@@ -241,14 +251,12 @@ class StrUtility
      */
     public static function filePath(string $path, string $pathExtension = 'php'): string
     {
-
-        $path = $_SERVER['DOCUMENT_ROOT'] .
-            str_replace('.', '/', implode('.', explode('.', $path)));
+        $path = str_replace('.', '/', implode('.', explode('.', $path)));
 
         $filePath = $path . '.' . strtolower($pathExtension);
 
         if (!is_file($filePath) || !file_exists($filePath))
-            throw new FileDoesNotExistsException('File Does Not Exist');
+            throw new FileDoesNotExistsException($filePath . ' Does Not Exist');
 
         return $filePath;
     }
@@ -756,5 +764,40 @@ class StrUtility
         $numberPart -= 1;
 
         return $stringPart . $separator . (string)$numberPart;
+    }
+
+    /**
+     * remove last word from given string
+     *
+     * @param string $string
+     * @return string
+     */
+    public static function rmLastWord(string $string): string
+    {
+        return preg_replace('/\W\w+\s*(\W*)$/', '$1', trim($string));
+    }
+
+    /**
+     * remove first word from given string
+     *
+     * @param string $string
+     * @return string
+     */
+    public static function rmFirstWord(string $string): string
+    {
+        return preg_replace('/^(\w+\s)/', '', trim($string));
+    }
+
+    /**
+     * find whether the type of a given string is slug
+     *
+     * @param string $slug
+     * @return bool
+     */
+    public static function is_slug(string $slug): bool
+    {
+        if (!preg_match('/^[\w\d][-\w\d]*$/', trim($slug)))
+            return false;
+        return true;
     }
 }
