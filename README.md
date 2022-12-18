@@ -109,8 +109,20 @@ StrUtility::rmAllBlanks(string $string): string
 StrUtility::alternate(?string $string, string $alternate = null): string    
 ```
 
-- translation methods, must create lang folder in root of project like lang/\<dirname\>
-translate('app.title') reference to lang/en/app.php and title array key in app.php.
+- translation methods, for using this method you should create a wrapper function 
+for example 
+
+```
+function <your_wrapper_function_name>(string $key, string $replace = '', string $dirName = 'en')
+{
+    $BASE_PATH = // base (root) path of your project
+
+    $translatePath = StrUtility::translatePath($BASE_PATH, $dirName);
+    return StrUtility::translate($translatePath . $key, $replace);
+}
+```
+
+< your_wrapper_function_name>('app.title') reference to lang/en/app.php and title array key in app.php
 file app.php must only return associative array.
 
 ```php
@@ -123,7 +135,7 @@ StrUtility::translate(string $key, string $replace = '', string $dirName = 'en')
 StrUtility::wrapper(int|string $string, int|string $wrapper = '*'): string
 ```
 
-- return path of file from root of project
+- return path of file
 
 ```php
 StrUtility::filePath(string $path, string $pathExtension = 'php'): string
@@ -320,6 +332,23 @@ StrUtility::incrementBy(string $string, ?string $separator = null): string
 StrUtility::decrementBy(string $string, ?string $separator = null): string
 ```
 
+- remove last word from given string 
+
+```php
+StrUtility::rmLastWord(string $string): string
+```
+
+- remove first word from given string
+
+```php
+StrUtility::rmFirstWord(string $string): string
+```
+
+- find whether the type of a given string is slug
+
+```php
+StrUtility::is_slug(string $slug): bool
+```
 ## PhpStringHelpers usage
 
 String helper functions are global so usage like the following:
