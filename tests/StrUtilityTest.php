@@ -16,6 +16,7 @@ use PhpStringHelpers\exceptions\LanguageFileIsNotArrayException;
 class StrUtilityTest extends TestCase
 {
     public $sampleText = 'somE TexT 444 for? tE34st! @#56$%^ <>';
+    public $basePath = __DIR__ . '/../';
 
     public function testToCamelCaseCanReturnStringValue()
     {
@@ -122,7 +123,7 @@ class StrUtilityTest extends TestCase
     public function testDotNotationCanReturnStringLikeDotNotation()
     {
         $string = strHelpersTest::dotNotation($this->sampleText);
-        $this->assertEquals('some.text.444.for.te34st.56', $string);
+        $this->assertEquals('somE.TexT.444.for.tE34st.56', $string);
     }
 
     public function testEntitiesWrapperCanReturnStringValue()
@@ -201,9 +202,10 @@ class StrUtilityTest extends TestCase
         $this->assertEquals('not defined', $string);
     }
 
-    public function testTranslateCanReturnStringData()
+    public function testTranslateCanReturnStringValue()
     {
-        $string = strHelpersTest::translate('app.title');
+        $translatePath = strHelpersTest::translatePath(realpath($this->basePath), 'en');
+        $string = strHelpersTest::translate($translatePath . 'app.title');
         $this->assertIsString($string);
     }
 
@@ -216,18 +218,28 @@ class StrUtilityTest extends TestCase
     public function testTranslateCanThrowExceptionIfLangFileDoesNotInArrayType()
     {
         $this->expectException(LanguageFileIsNotArrayException::class);
-        $string = strHelpersTest::translate('app.title');
+        $translatePath = strHelpersTest::translatePath(realpath($this->basePath), 'en');
+        strHelpersTest::translate($translatePath . 'auth.title');
     }
+
+    // public function testTranslateCanReturnReplaceParamIfGivenKeyDoesNotExists()
+    // {
+    //     $translatePath = strHelpersTest::translatePath(realpath($this->basePath), 'en');
+    //     $string = strHelpersTest::translate($translatePath . 'app.site', 'replace text');
+    //     $this->assertEquals('replace text', $string);
+    // }
 
     public function testFilePathCanReturnStringValue()
     {
-        $filePath = strHelpersTest::filePath('lang.en.app');
+        $basePath = realpath($this->basePath);
+        $filePath = strHelpersTest::filePath($basePath . '.lang.en.app');
         $this->assertIsString($filePath);
     }
 
     public function testFilePathReturnedFilePathIfExists()
     {
-        $filePath = strHelpersTest::filePath('lang.en.app');
+        $basePath = realpath($this->basePath);
+        $filePath = strHelpersTest::filePath($basePath . '.lang.en.app');
         $this->assertFileExists($filePath);
         $this->assertFileEquals('lang/en/app.php', $filePath);
         $this->assertFileIsReadable($filePath);
@@ -236,7 +248,7 @@ class StrUtilityTest extends TestCase
     public function testPathThrowAnExceptionsIfFileDoesNotExists()
     {
         $this->expectException(FileDoesNotExistsException::class);
-        $filePath = strHelpersTest::filePath('lang.en.config.auth');
+        strHelpersTest::filePath('lang.en.config.auth');
     }
 
     public function testWrapperCanReturnStringValue()
@@ -782,5 +794,47 @@ class StrUtilityTest extends TestCase
     {
         $string = strHelpersTest::decrementBy('bar1', '*');
         $this->assertEquals('bar*0', $string);
+    }
+
+    public function testRmLastWordCanReturnStringValue()
+    {
+        $string = strHelpersTest::rmLastWord('foo bar baz');
+        $this->assertIsString($string);
+    }
+
+    public function testRmLastWordCanRemoveLastWordOfGivenString()
+    {
+        $string = strHelpersTest::rmLastWord('foo bar baz 123');
+        $this->assertEquals('foo bar baz', $string);
+    }
+
+    public function testRmFirstWordCanReturnStringValue()
+    {
+        $string = strHelpersTest::rmFirstWord('foo bar baz');
+        $this->assertIsString($string);
+    }
+
+    public function testRmFirstWordCanRemoveFirstWordOfGivenString()
+    {
+        $string = strHelpersTest::rmFirstWord('12 123 foo bar baz');
+        $this->assertEquals('123 foo bar baz', $string);
+    }
+
+    public function testIsSlugCanReturnBooleanValue()
+    {
+        $slug = strHelpersTest::is_slug('foo-bar-baz');
+        $this->assertIsBool($slug);
+    }
+
+    public function testIsSlugReturnFalseIfGivenStringIsNotASlug()
+    {
+        $slug = strHelpersTest::is_slug('foo bar baz');
+        $this->assertNotTrue($slug);
+    }
+
+    public function testIsSlugReturnTrueIfGivenStringIsASlug()
+    {
+        $slug = strHelpersTest::is_slug('132Foo-12bar-3432az');
+        $this->assertTrue($slug);
     }
 }
