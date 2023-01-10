@@ -26,7 +26,7 @@ String helper methods are static so usage like the following:
 First Using The StrUtility Class:
 
 ```php
-use PhpStringHelpers\utility\StrUtility;
+use PhpStringHelpers\Facade\StrUtility;
 ```
 
 <br>

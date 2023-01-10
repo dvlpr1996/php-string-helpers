@@ -2,6 +2,10 @@
 
 All notable changes to `dvlpr1996/php-string-helpers` will be documented in this file
 
+## 2.0.0 (2023-mm-dd)
+
+- Change in the implementation of package structure
+
 ## 1.0.0 (2022-12-18)
 
 Add new methods : 
