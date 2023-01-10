@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-use PhpStringHelpers\utility\StrUtility as strHelpers;
+use PhpStringHelpers\Facade\StrUtility as strHelpers;
 
 if (!function_exists('toCamelCase')) {
     function toCamelCase(string $words): string

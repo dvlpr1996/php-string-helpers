@@ -15,14 +15,13 @@ namespace PhpStringHelpers\utility;
 use PhpStringHelpers\exceptions\UrlIsNotValidException;
 use PhpStringHelpers\exceptions\FileDoesNotExistsException;
 use PhpStringHelpers\exceptions\LanguageFileIsNotArrayException;
-use PHPUnit\Util\Json;
 
 class StrUtility
 {
     /**  @var string regex pattern for regular words pattern */
     const REGULAR_WORDS_PATTERN = '/[^a-zA-Z0-9]/i';
 
-    private static function regularWords(string $words)
+    private function regularWords(string $words)
     {
         return trim(preg_replace(StrUtility::REGULAR_WORDS_PATTERN, ' ', $words));
     }
@@ -33,9 +32,9 @@ class StrUtility
      * @param string $words
      * @return string
      */
-    public static function toCamelCase(string $words): string
+    public function toCamelCase(string $words): string
     {
-        return str_replace(' ', '', lcfirst(ucwords(strtolower(self::regularWords($words)))));
+        return str_replace(' ', '', lcfirst(ucwords(strtolower($this->regularWords($words)))));
     }
 
     /**
@@ -44,9 +43,9 @@ class StrUtility
      * @param string $words
      * @return string
      */
-    public static function toPascalCase(string $words): string
+    public function toPascalCase(string $words): string
     {
-        return str_replace(' ', '', ucwords(strtolower(self::regularWords($words))));
+        return str_replace(' ', '', ucwords(strtolower($this->regularWords($words))));
     }
 
     /**
@@ -55,9 +54,9 @@ class StrUtility
      * @param string $words
      * @return string
      */
-    public static function toKebabCase(string $words): string
+    public function toKebabCase(string $words): string
     {
-        return preg_replace('/\s+/', '-', strtolower(self::regularWords($words)));
+        return preg_replace('/\s+/', '-', strtolower($this->regularWords($words)));
     }
 
     /**
@@ -66,9 +65,9 @@ class StrUtility
      * @param string $words
      * @return string
      */
-    public static function toTitleCase(string $words): string
+    public function toTitleCase(string $words): string
     {
-        return preg_replace('/\s+/', ' ', ucwords(strtolower(self::regularWords($words))));
+        return preg_replace('/\s+/', ' ', ucwords(strtolower($this->regularWords($words))));
     }
 
     /**
@@ -78,9 +77,9 @@ class StrUtility
      * @param string $words
      * @return string
      */
-    public static function toConstant(string $words): string
+    public function toConstant(string $words): string
     {
-        return preg_replace('/\s+/', '_', strtoupper(self::regularWords($words)));
+        return preg_replace('/\s+/', '_', strtoupper($this->regularWords($words)));
     }
 
     /**
@@ -89,9 +88,9 @@ class StrUtility
      * @param string $words
      * @return string
      */
-    public static function toSnakeCase(string $words): string
+    public function toSnakeCase(string $words): string
     {
-        return preg_replace('/\s+/', '_', strtolower(self::regularWords($words)));
+        return preg_replace('/\s+/', '_', strtolower($this->regularWords($words)));
     }
 
     /**
@@ -101,9 +100,9 @@ class StrUtility
      * @param string $words
      * @return string
      */
-    public static function toPathCase(string $words): string
+    public function toPathCase(string $words): string
     {
-        return preg_replace('/\s+/', '/', strtolower(self::regularWords($words)));
+        return preg_replace('/\s+/', '/', strtolower($this->regularWords($words)));
     }
 
     /**
@@ -113,9 +112,9 @@ class StrUtility
      * @param string $words
      * @return string
      */
-    public static function toAdaCase(string $words): string
+    public function toAdaCase(string $words): string
     {
-        return preg_replace('/\s+/', '_', ucwords(strtolower(self::regularWords($words))));
+        return preg_replace('/\s+/', '_', ucwords(strtolower($this->regularWords($words))));
     }
 
     /**
@@ -125,9 +124,9 @@ class StrUtility
      * @param string $words
      * @return string
      */
-    public static function dotNotation(string $words): string
+    public function dotNotation(string $words): string
     {
-        return preg_replace('/\s+/', '.', self::regularWords($words));
+        return preg_replace('/\s+/', '.', $this->regularWords($words));
     }
 
     /**
@@ -136,7 +135,7 @@ class StrUtility
      * @param $data
      * @return string
      */
-    public static function entitiesWrapper($data): string
+    public function entitiesWrapper($data): string
     {
         return htmlspecialchars($data ?? '', ENT_QUOTES, 'UTF-8');
     }
@@ -147,7 +146,7 @@ class StrUtility
      * @param string $string
      * @return string
      */
-    public static function toSlug(string $string): string
+    public function toSlug(string $string): string
     {
         $string = preg_replace('/[^\pL\d]+/i', '-', $string);
         return trim(strtolower(preg_replace('/-+/', '-', $string)), '-');
@@ -159,7 +158,7 @@ class StrUtility
      * @param string $string
      * @return string
      */
-    public static function rmAllBlanks(string $string): string
+    public function rmAllBlanks(string $string): string
     {
         return preg_replace('/[\s]/', '', $string);
     }
@@ -172,10 +171,10 @@ class StrUtility
      * @return string
      * if alternate param is null return not defined strings
      */
-    public static function alternate(?string $string, string $alternate = null): string
+    public function alternate(?string $string, string $alternate = null): string
     {
         $returnString = $string ?: $alternate;
-        return is_null($returnString) ? 'not defined' : self::clearString($returnString);
+        return is_null($returnString) ? 'not defined' : $this->clearString($returnString);
     }
 
     /**
@@ -192,11 +191,11 @@ class StrUtility
      * @throws FileDoesNotExistsException
      * @throws LanguageFileIsNotArrayException
      */
-    public static function translate(string $key, string $replace = ''): string
+    public function translate(string $key, string $replace = ''): string
     {
         $fileName = explode('.', $key);
         $key = $fileName[1];
-        $filePath = self::filePath($fileName[0]);
+        $filePath = $this->filePath($fileName[0]);
 
         $data = require_once $filePath;
 
@@ -217,7 +216,7 @@ class StrUtility
      * @param string $dirName
      * @return string
      */
-    public static function translatePath(string $baseAppPath, string $dirName): string
+    public function translatePath(string $baseAppPath, string $dirName): string
     {
         return $baseAppPath . '/lang/' . $dirName . '/';
     }
@@ -229,7 +228,7 @@ class StrUtility
      * @param string $wrapper
      * @return string
      */
-    public static function wrapper(int|string $string, int|string $wrapper = '*'): string
+    public function wrapper(int|string $string, int|string $wrapper = '*'): string
     {
         $string = trim((string)$string);
         $wrapper = (string)$wrapper;
@@ -249,7 +248,7 @@ class StrUtility
      * @return string
      * @throws FileDoesNotExistsException
      */
-    public static function filePath(string $path, string $pathExtension = 'php'): string
+    public function filePath(string $path, string $pathExtension = 'php'): string
     {
         $path = str_replace('.', '/', implode('.', explode('.', $path)));
 
@@ -271,7 +270,7 @@ class StrUtility
      * if $length is bigger than 12 or less than 4 return 0
      * otherwise return generated pin
      */
-    public static function generatePin(int $length = 4): int
+    public function generatePin(int $length = 4): int
     {
         if ($length < 4 || $length > 12) return 0;
 
@@ -287,13 +286,13 @@ class StrUtility
      * @param string $data
      * @return string
      */
-    public static function clearString(string $data): string
+    public function clearString(string $data): string
     {
         $data = stripslashes(trim($data));
         $data = strip_tags($data);
-        $data = self::rmExtraBlank($data);
+        $data = $this->rmExtraBlank($data);
         $data = html_entity_decode(htmlentities($data));
-        $data = self::entitiesWrapper($data);
+        $data = $this->entitiesWrapper($data);
         return $data;
     }
 
@@ -304,9 +303,9 @@ class StrUtility
      * @param string $data
      * @return string
      */
-    public static function pureString(string $data): string
+    public function pureString(string $data): string
     {
-        return self::rmExtraBlank(trim(preg_replace('/[^\pL]+/', ' ', $data)));
+        return $this->rmExtraBlank(trim(preg_replace('/[^\pL]+/', ' ', $data)));
     }
 
     /**
@@ -316,7 +315,7 @@ class StrUtility
      * [optional] default is 5
      * @return string
      */
-    public static function randomChar(int $size = 5): string
+    public function randomChar(int $size = 5): string
     {
         $alphabet = str_shuffle('abcdefghijklmnopqrstuvwxyz');
         $words = '';
@@ -332,7 +331,7 @@ class StrUtility
      *
      * @return string
      */
-    public static function randomHex(): string
+    public function randomHex(): string
     {
         return '#' . substr(dechex((int)mt_rand() * 16777215), 0, 6);
     }
@@ -342,7 +341,7 @@ class StrUtility
      *
      * @return string
      */
-    public static function randomRgb(): string
+    public function randomRgb(): string
     {
         return mt_rand(0, 255) . '.' . mt_rand(0, 255) . '.' . mt_rand(0, 255);
     }
@@ -353,7 +352,7 @@ class StrUtility
      * @param string $string
      * @return string
      */
-    public static function rmLink(string $string): string
+    public function rmLink(string $string): string
     {
         $pattern = '[-a-zA-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Za-z0-9+&@#\/%=~_|$.]/i';
         $protocols = 'https?|ftp|file|mailto|tel';
@@ -364,7 +363,7 @@ class StrUtility
         $string = preg_replace('/(\d+\.){3}\d\/?/i', '', $string);
         $string = preg_replace('/(\w+\.).' . $pattern, '', $string);
 
-        return self::rmExtraBlank($string);
+        return $this->rmExtraBlank($string);
     }
 
     /**
@@ -376,14 +375,14 @@ class StrUtility
      * @return string
      * limitChar('foo bar',2) return foo b...
      */
-    public static function limitChar(string|int $string, int $length): string
+    public function limitChar(string|int $string, int $length): string
     {
         $string = (string)$string;
 
         if (strlen($string) <= $length)
             return $string;
 
-        return self::rmRightChar($string, $length) . '...';
+        return $this->rmRightChar($string, $length) . '...';
     }
 
     /**
@@ -397,7 +396,7 @@ class StrUtility
      * [optional] default empty false
      * @return string
      */
-    public static function generateId(
+    public function generateId(
         string|int $prefix = '',
         string|int $suffix = '',
         bool $moreEntropy = false
@@ -414,11 +413,11 @@ class StrUtility
      * @param string $string
      * @return string
      */
-    public static function rmNumbers(string $string): string
+    public function rmNumbers(string $string): string
     {
         $remove_hex = preg_replace('/(\b[xX]|0)[0-9a-fA-F]+/i', ' ', trim($string));
         $remove_decimal = preg_replace('/[\d]/im', ' ', trim($remove_hex));
-        return self::rmExtraBlank($remove_decimal);
+        return $this->rmExtraBlank($remove_decimal);
     }
 
     /**
@@ -427,9 +426,9 @@ class StrUtility
      * @param string $string
      * @return string
      */
-    public static function rmCharacters(string $string): string
+    public function rmCharacters(string $string): string
     {
-        return self::rmExtraBlank(preg_replace('/[-_a-z\W]+/i', ' ', trim($string)));
+        return $this->rmExtraBlank(preg_replace('/[-_a-z\W]+/i', ' ', trim($string)));
     }
 
     /**
@@ -438,7 +437,7 @@ class StrUtility
      * @param string $string
      * @return string
      */
-    public static function rmExtraBlank(string $string): string
+    public function rmExtraBlank(string $string): string
     {
         return preg_replace('/\s+/im', ' ', trim($string));
     }
@@ -451,7 +450,7 @@ class StrUtility
      * return null if given hex color is not valid
      * otherwise return rgb color
      */
-    public static function hexToRgb(string $color): ?string
+    public function hexToRgb(string $color): ?string
     {
         $hex = trim($color, '#');
 
@@ -476,7 +475,7 @@ class StrUtility
      * return null if given rgb color is not valid
      * otherwise return hex color
      */
-    public static function rgbToHex(string $color): ?string
+    public function rgbToHex(string $color): ?string
     {
         $rgb = explode('.', $color);
 
@@ -496,14 +495,14 @@ class StrUtility
      * @return string
      * @throws UrlIsNotValidException
      */
-    public static function generateAnchor(string|int $content, string $href): string
+    public function generateAnchor(string|int $content, string $href): string
     {
         $href = filter_var(trim($href), FILTER_SANITIZE_URL);
 
         if (!filter_var($href, FILTER_VALIDATE_URL))
             throw new UrlIsNotValidException('Url Is Not Valid');
 
-        return "<a href=$href>" . self::clearString($content) . '</a>';
+        return "<a href=$href>" . $this->clearString($content) . '</a>';
     }
 
     /**
@@ -513,12 +512,12 @@ class StrUtility
      * @param string $string
      * @return string
      */
-    public static function getEncoding(string $string): string
+    public function getEncoding(string $string): string
     {
         return mb_detect_encoding($string, strict: true);
     }
 
-    public static function isUtf8(string|array $string): bool
+    public function isUtf8(string|array $string): bool
     {
         return mb_check_encoding($string, 'UTF-8');
     }
@@ -529,10 +528,10 @@ class StrUtility
      * @param string $string
      * @return string
      */
-    public static function rmDuplicateWords(string $string): string
+    public function rmDuplicateWords(string $string): string
     {
         $string = array_unique(explode(' ', strtolower($string)));
-        return self::rmExtraBlank(implode(' ', $string));
+        return $this->rmExtraBlank(implode(' ', $string));
     }
 
     /**
@@ -543,7 +542,7 @@ class StrUtility
      * @param int $num
      * @return string
      */
-    public static function rmRightChar(string $words, int $num): string
+    public function rmRightChar(string $words, int $num): string
     {
         if (strlen($words) < $num)
             return $words;
@@ -560,7 +559,7 @@ class StrUtility
      * @param int $num
      * @return string
      */
-    public static function rmLeftChar(string $words, int $num): string
+    public function rmLeftChar(string $words, int $num): string
     {
         if (strlen($words) < $num)
             return $words;
@@ -578,10 +577,10 @@ class StrUtility
      * @param int $num
      * @return string
      */
-    public static function rmBothSideChar(string $words, int $num): string
+    public function rmBothSideChar(string $words, int $num): string
     {
-        $words = self::rmLeftChar($words, $num);
-        return self::rmRightChar($words, $num);
+        $words = $this->rmLeftChar($words, $num);
+        return $this->rmRightChar($words, $num);
     }
 
     /**
@@ -592,7 +591,7 @@ class StrUtility
      * return false if $data is empty or string type or not a valid json
      * otherwise return true
      */
-    public static function isJson(mixed $data): bool
+    public function isJson(mixed $data): bool
     {
         if (empty($data) || !is_string($data))
             return false;
@@ -612,7 +611,7 @@ class StrUtility
      * [optional] default is false
      * @return bool
      */
-    public static function isContains(string $string, string $search, bool $caseSensitive = false): bool
+    public function isContains(string $string, string $search, bool $caseSensitive = false): bool
     {
         if (empty($search) || empty($string))
             return false;
@@ -632,7 +631,7 @@ class StrUtility
      * [optional] default false
      * @return bool
      */
-    public static function isStartWith(string $string, string $search, bool $caseSensitive = false): bool
+    public function isStartWith(string $string, string $search, bool $caseSensitive = false): bool
     {
         if (empty($search) || empty($string))
             return false;
@@ -649,7 +648,7 @@ class StrUtility
      * @param string $string
      * @return string
      */
-    public static function lastWord(string $string): string
+    public function lastWord(string $string): string
     {
         if (empty($string))
             return '';
@@ -666,7 +665,7 @@ class StrUtility
      * @param string $string
      * @return string
      */
-    public static function firstWord(string $string): string
+    public function firstWord(string $string): string
     {
         $firstWordStart = strpos(trim($string), ' ');
 
@@ -682,7 +681,7 @@ class StrUtility
      * @param string $string
      * @return string
      */
-    public static function getFirstNumbers(string $string): string
+    public function getFirstNumbers(string $string): string
     {
         if (preg_match_all('/^\d+/', $string, $numbers))
             return $numbers[0][0];
@@ -696,25 +695,25 @@ class StrUtility
      * @param string $string
      * @return string
      */
-    public static function getLastNumbers(string $string): string
+    public function getLastNumbers(string $string): string
     {
-        if (preg_match_all('/\d+\b/', self::lastWord($string), $numbers))
+        if (preg_match_all('/\d+\b/', $this->lastWord($string), $numbers))
             return end($numbers[0]);
 
         return '';
     }
 
-    public static function rmBeginningNumbers(string $string): string
+    public function rmBeginningNumbers(string $string): string
     {
-        return self::rmExtraBlank(preg_replace('/\b\d+/i', '', trim($string)));
+        return $this->rmExtraBlank(preg_replace('/\b\d+/i', '', trim($string)));
     }
 
-    public static function rmEndingNumbers(string $string): string
+    public function rmEndingNumbers(string $string): string
     {
-        return self::rmExtraBlank(preg_replace('/\d+\b/i', '', trim($string)));
+        return $this->rmExtraBlank(preg_replace('/\d+\b/i', '', trim($string)));
     }
 
-    public static function convertToUtf8(string $string): string|bool
+    public function convertToUtf8(string $string): string|bool
     {
         $converter = iconv(mb_detect_encoding($string, mb_detect_order(), true), "UTF-8", $string);
         return $converter ? $converter : false;
@@ -729,10 +728,10 @@ class StrUtility
      * @return string
      * incrementBy('foo') return foo1
      */
-    public static function incrementBy(string $string, ?string $separator = null): string
+    public function incrementBy(string $string, ?string $separator = null): string
     {
         $separator = $separator ?: null;
-        $numberPart = self::getLastNumbers($string);
+        $numberPart = $this->getLastNumbers($string);
         $stringPart = rtrim($string, $numberPart);
 
         if ($numberPart === '')
@@ -752,10 +751,10 @@ class StrUtility
      * @return string
      * decrementBy('foo2') return foo1
      */
-    public static function decrementBy(string $string, ?string $separator = null): string
+    public function decrementBy(string $string, ?string $separator = null): string
     {
         $separator = $separator ?: null;
-        $numberPart = self::getLastNumbers($string);
+        $numberPart = $this->getLastNumbers($string);
         $stringPart = rtrim($string, $numberPart);
 
         if ($numberPart === '')
@@ -772,7 +771,7 @@ class StrUtility
      * @param string $string
      * @return string
      */
-    public static function rmLastWord(string $string): string
+    public function rmLastWord(string $string): string
     {
         return preg_replace('/\W\w+\s*(\W*)$/', '$1', trim($string));
     }
@@ -783,7 +782,7 @@ class StrUtility
      * @param string $string
      * @return string
      */
-    public static function rmFirstWord(string $string): string
+    public function rmFirstWord(string $string): string
     {
         return preg_replace('/^(\w+\s)/', '', trim($string));
     }
@@ -794,7 +793,7 @@ class StrUtility
      * @param string $slug
      * @return bool
      */
-    public static function is_slug(string $slug): bool
+    public function is_slug(string $slug): bool
     {
         if (!preg_match('/^[\w\d][-\w\d]*$/', trim($slug)))
             return false;
