@@ -20,9 +20,9 @@ You can install the package via composer:
 composer require dvlpr1996/php-string-helpers
 ```
 
-## StrUtility usage
+## StrUtility usage as static methods
 
-String helper methods are static so usage like the following:
+you can use String helper methods as static so usage like the following:
 First Using The StrUtility Class:
 
 ```php
@@ -349,12 +349,46 @@ StrUtility::rmFirstWord(string $string): string
 ```php
 StrUtility::is_slug(string $slug): bool
 ```
-## PhpStringHelpers usage
+
+- find whether the type of a given ip is valid ipv4
+
+```php
+StrUtility::is_ipv4(string $ip): bool
+```
+
+- find whether the type of a given ip is valid ipv6
+
+```php
+StrUtility::is_ipv6(string $ip): bool
+```
+
+- Deletes the words before the given $search word
+
+```php
+StrUtility::after(string $string, string $search): string
+```
+
+- Deletes the words after the given $search word
+
+```php
+StrUtility::before(string $string, string $search): string
+```
+
+## StrUtility usage as helper functions
 
 String helper functions are global so usage like the following:
 
 ```php
 decrementBy(string $string, ?string $separator = null): string
+```
+## StrUtility usage as object
+
+```php
+use PhpStringHelpers\utility\StrUtility;
+
+$string = new StrUtility;
+
+$string->toConstant('foo bar baz');
 ```
 
 ## Changelog
