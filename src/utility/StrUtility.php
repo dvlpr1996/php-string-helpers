@@ -837,4 +837,52 @@ class StrUtility
             return false;
         return true;
     }
+
+    /**
+     * Deletes the words before the given $search word
+     *
+     * @param string $string
+     * @param string $search
+     * @return string
+     */
+    public function after(string $string, string $search): string
+    {
+        if (!$this->checkStringForRemoveOperation($string, $search))
+            return $string;
+        return $this->rmExtraBlank(explode($search, $string)[1]);
+    }
+
+    /**
+     * Deletes the words after the given $search word
+     *
+     * @param string $string
+     * @param string $search
+     * @return string
+     */
+    public function before(string $string, string $search): string
+    {
+        if (!$this->checkStringForRemoveOperation($string, $search))
+            return $string;
+        return $this->rmExtraBlank(strstr($string, $search, true));
+    }
+
+    private function checkStringForRemoveOperation(string $string, string $word): bool
+    {
+        $string = strtolower(trim($string));
+        $word = strtolower(trim($word));
+
+        if (empty($string) || !is_string($string))
+            return false;
+
+        if (empty($word) || !is_string($word))
+            return false;
+
+        if (!$this->isContains($string, $word))
+            return false;
+
+        if (str_ends_with($string, $word))
+            return false;
+
+        return true;
+    }
 }

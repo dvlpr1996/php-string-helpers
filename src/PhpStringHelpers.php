@@ -398,3 +398,17 @@ if (!function_exists('is_ipv6')) {
         return strHelpers::is_ipv6($ip);
     }
 }
+
+if (!function_exists('after')) {
+    function after(string $string, string $search): string
+    {
+        return strHelpers::after($string, $search);
+    }
+}
+
+if (!function_exists('before')) {
+    function before(string $string, string $search): string
+    {
+        return strHelpers::before($string, $search);
+    }
+}
