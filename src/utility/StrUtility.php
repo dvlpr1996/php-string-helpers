@@ -799,4 +799,42 @@ class StrUtility
             return false;
         return true;
     }
+
+    /**
+     * find whether the type of a given ip is valid ipv4
+     *
+     * @param string $ip
+     * @return boolean
+     */
+    public function is_ipv4(string $ip): bool
+    {
+        if (empty($ip) || !is_string($ip))
+            return false;
+
+        $pattern = '/^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\.(?!$)|$)){4}$/';
+
+        if (!preg_match($pattern, trim($ip)))
+            return false;
+        return true;
+    }
+
+    /**
+     * find whether the type of a given ip is valid ipv6
+     *
+     * @param string $ip
+     * @return boolean
+     */
+    public function is_ipv6(string $ip): bool
+    {
+        if (empty($ip) || !is_string($ip))
+            return false;
+
+        $pattern = '
+        (([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))
+    ';
+
+        if (!preg_match($pattern, trim($ip)))
+            return false;
+        return true;
+    }
 }

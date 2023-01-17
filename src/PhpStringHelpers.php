@@ -384,3 +384,17 @@ if (!function_exists('is_slug')) {
         return strHelpers::is_slug($slug);
     }
 }
+
+if (!function_exists('is_ipv4')) {
+    function is_ipv4(string $ip): bool
+    {
+        return strHelpers::is_ipv4($ip);
+    }
+}
+
+if (!function_exists('is_ipv6')) {
+    function is_ipv6(string $ip): bool
+    {
+        return strHelpers::is_ipv6($ip);
+    }
+}
