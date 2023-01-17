@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace PhpStringHelpers\Tests;
 
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PHPUnit\Framework\TestCase;
 use PhpStringHelpers\exceptions\UrlIsNotValidException;
-use PhpStringHelpers\utility\StrUtility as strHelpersTest;
+use PhpStringHelpers\Facade\StrUtility as strHelpersTest;
 use PhpStringHelpers\exceptions\FileDoesNotExistsException;
 use PhpStringHelpers\exceptions\LanguageFileIsNotArrayException;
 
@@ -836,5 +837,113 @@ class StrUtilityTest extends TestCase
     {
         $slug = strHelpersTest::is_slug('132Foo-12bar-3432az');
         $this->assertTrue($slug);
+    }
+
+    public function testIsIpV4CanReturnBooleanValue()
+    {
+        $ip = strHelpersTest::is_ipv4('127.0.0.1');
+        $this->assertIsBool($ip);
+    }
+
+    public function testIsIpV4CanReturnFalseIfGivenIp4IsNotValid()
+    {
+        $ip = strHelpersTest::is_ipv4('127.0.0.256');
+        $this->assertFalse($ip);
+    }
+
+    public function testIsIpV4CanReturnTrueIfGivenIp4IsValid()
+    {
+        $ip = strHelpersTest::is_ipv4('127.0.0.255');
+        $this->assertTrue($ip);
+    }
+
+    public function testIsIpV4CanReturnFalseIfGivenIpParamIsEmpty()
+    {
+        $ip = strHelpersTest::is_ipv4('');
+        $this->assertFalse($ip);
+    }
+
+    public function testIsIpV4CanReturnFalseIfGivenIpParamIsNotString()
+    {
+        $ip = strHelpersTest::is_ipv4('foo bar');
+        $this->assertFalse($ip);
+    }
+
+    public function testIsIpV6CanReturnBooleanValue()
+    {
+        $ip = strHelpersTest::is_ipv6('2001:0db8:0000:0000:0000:ff00:0042:8329');
+        $this->assertIsBool($ip);
+    }
+
+    public function testIsIpV6CanReturnFalseIfGivenIp6IsNotValid()
+    {
+        $ip = strHelpersTest::is_ipv6('127.0.0.1');
+        $this->assertFalse($ip);
+    }
+
+    public function testIsIpV6CanReturnTrueIfGivenIp6IsValid()
+    {
+        $ip = strHelpersTest::is_ipv6('2001:0db8:0000:0000:0000:ff00:0042:8329');
+        $this->assertTrue($ip);
+    }
+
+    public function testIsIpV6CanReturnFalseIfGivenIpParamIsEmpty()
+    {
+        $ip = strHelpersTest::is_ipv6('');
+        $this->assertFalse($ip);
+    }
+
+    public function testIsIpV6CanReturnFalseIfGivenIpParamIsNotString()
+    {
+        $ip = strHelpersTest::is_ipv6('foo bar baz');
+        $this->assertFalse($ip);
+    }
+
+    public function testAfterCanReturnStringValue()
+    {
+        $string = strHelpersTest::after('foo bar baz', 'bar');
+        $this->assertIsString($string);
+    }
+
+    public function testAfterCanReturnStringParamIfStringParamIsEmpty()
+    {
+        $string = strHelpersTest::after('', 'foo');
+        $this->assertEquals('', $string);
+    }
+
+    public function testAfterCanReturnStringParamIfSearchIsEmpty()
+    {
+        $string = strHelpersTest::after('foo bar baz', '');
+        $this->assertEquals('foo bar baz', $string);
+    }
+
+    public function testAfterCanRemoveTheWordsBeforeTheSearchParam()
+    {
+        $string = strHelpersTest::after('foo bar baz', 'bar');
+        $this->assertEquals('baz', $string);
+    }
+
+    public function testBeforeCanReturnStringValue()
+    {
+        $string = strHelpersTest::before('foo bar baz', 'bar');
+        $this->assertIsString($string);
+    }
+
+    public function testBeforeCanReturnStringParamIfStringParamIsEmpty()
+    {
+        $string = strHelpersTest::before('', 'foo');
+        $this->assertEquals('', $string);
+    }
+
+    public function testBeforeCanReturnStringParamIfSearchIsEmpty()
+    {
+        $string = strHelpersTest::before('foo bar baz', '');
+        $this->assertEquals('foo bar baz', $string);
+    }
+
+    public function testBeforeCanRemoveTheWordsAfterTheSearchParam()
+    {
+        $string = strHelpersTest::before('foo bar baz', 'foo');
+        $this->assertEquals('', $string);
     }
 }
