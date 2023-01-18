@@ -2,9 +2,13 @@
 
 All notable changes to `dvlpr1996/php-string-helpers` will be documented in this file
 
-## 2.0.0 (2023-01-dd)
+## 2.0.0 (2023-01-18)
 
-- Change the implementation of package structure
+Change the implementation of package structure now user can use this library in 3 different ways
+
+- StrUtility usage as object
+- StrUtility usage as helper functions
+- StrUtility usage as static methods
 
 Add new methods : 
 
@@ -12,7 +16,6 @@ Add new methods :
 - StrUtility::is_ipv6(string $ip): bool
 - StrUtility::after(string $string, string $search): string
 - StrUtility::before(string $string, string $search): string
-
 
 ## 1.0.0 (2022-12-18)
 

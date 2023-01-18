@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PhpStringHelpers\Tests;
 
-use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PHPUnit\Framework\TestCase;
 use PhpStringHelpers\exceptions\UrlIsNotValidException;
 use PhpStringHelpers\Facade\StrUtility as strHelpersTest;
