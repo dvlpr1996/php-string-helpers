@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @Package: some useful php string utility methods
+ * @Package: Some Useful Php String Utility Methods
  * @Class  : StrUtility
  * @Author : Nima jahan bakhshian / dvlpr1996 <nimajahanbakhshian@gmail.com>
  * @URL    : https://github.com/dvlpr1996
@@ -178,32 +178,37 @@ class StrUtility
     }
 
     /**
-     * translation methods
+     * translation methods just for one level
      * create lang folder in root of your project
      * then create wrapper function or method based on documentation
      *
      * @param string $key |
      * <your custom wrapper>('app.title') reference to ./lang/en/app.php and
      * title array key in app.php file
-     * @param string $replace
+     * @param string $alternative
      * [optional]
      * @return string
      * @throws FileDoesNotExistsException
      * @throws LanguageFileIsNotArrayException
      */
-    public function translate(string $key, string $replace = ''): string
+    public function translate(string $key, string $alternative = ''): string|array
     {
-        $fileName = explode('.', $key);
-        $key = $fileName[1];
-        $filePath = $this->filePath($fileName[0]);
+        $keys = explode('.', $key);
 
-        $data = require_once $filePath;
+        $filePath = $this->filePath($keys[0]);
+
+        $data = require $filePath;
+
+        if (!isset($keys[1]))
+            return $data;
+
+        $key = $keys[1];
 
         if (!is_array($data))
-            throw new LanguageFileIsNotArrayException("File data should be array");
+            throw new LanguageFileIsNotArrayException('File data should be array');
 
         if (!key_exists($key, $data))
-            return html_entity_decode(htmlentities($replace));
+            return html_entity_decode(htmlentities($alternative));
 
         return html_entity_decode(htmlentities($data[$key]));
     }
@@ -457,7 +462,7 @@ class StrUtility
         if (strlen($hex) !== 6)
             return null;
 
-        if (!preg_match("/^[0-9ABCDEFabcdef\#]+$/i", $hex))
+        if (!preg_match('/^[0-9ABCDEFabcdef\#]+$/i', $hex))
             return null;
 
         $r = substr($hex, 0, 2);
@@ -480,7 +485,7 @@ class StrUtility
         $rgb = explode('.', $color);
 
         foreach ($rgb as $value) {
-            if (!preg_match("/^[0-9]+$/i", $value))
+            if (!preg_match('/^[0-9]+$/i', $value))
                 return null;
         }
 
@@ -502,7 +507,7 @@ class StrUtility
         if (!filter_var($href, FILTER_VALIDATE_URL))
             throw new UrlIsNotValidException('Url Is Not Valid');
 
-        return "<a href=$href>" . $this->clearString($content) . '</a>';
+        return '<a href=$href>' . $this->clearString($content) . '</a>';
     }
 
     /**
@@ -715,7 +720,7 @@ class StrUtility
 
     public function convertToUtf8(string $string): string|bool
     {
-        $converter = iconv(mb_detect_encoding($string, mb_detect_order(), true), "UTF-8", $string);
+        $converter = iconv(mb_detect_encoding($string, mb_detect_order(), true), 'UTF-8', $string);
         return $converter ? $converter : false;
     }
 

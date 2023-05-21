@@ -212,7 +212,9 @@ class StrUtilityTest extends TestCase
     public function testTranslateCanThrowExceptionIfLangFileDoesNotExists()
     {
         $this->expectException(FileDoesNotExistsException::class);
-        $string = strHelpersTest::translate('validation.first_name');
+
+        $translatePath = strHelpersTest::translatePath(realpath($this->basePath), 'en');
+        strHelpersTest::translate($translatePath . 'validation.first_name');
     }
 
     public function testTranslateCanThrowExceptionIfLangFileDoesNotInArrayType()
@@ -222,12 +224,12 @@ class StrUtilityTest extends TestCase
         strHelpersTest::translate($translatePath . 'auth.title');
     }
 
-    // public function testTranslateCanReturnReplaceParamIfGivenKeyDoesNotExists()
-    // {
-    //     $translatePath = strHelpersTest::translatePath(realpath($this->basePath), 'en');
-    //     $string = strHelpersTest::translate($translatePath . 'app.site', 'replace text');
-    //     $this->assertEquals('replace text', $string);
-    // }
+    public function testTranslateCanReturnReplaceParamIfGivenKeyDoesNotExists()
+    {
+        $translatePath = strHelpersTest::translatePath(realpath($this->basePath), 'en');
+        $string = strHelpersTest::translate($translatePath . 'app.site', 'replace text');
+        $this->assertEquals('replace text', $string);
+    }
 
     public function testFilePathCanReturnStringValue()
     {

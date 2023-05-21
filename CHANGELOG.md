@@ -2,6 +2,10 @@
 
 All notable changes to `dvlpr1996/php-string-helpers` will be documented in this file
 
+## 2.0.1(2023-05-22)
+
+fix StrUtility::translate() method bug
+
 ## 2.0.0 (2023-01-18)
 
 Change the implementation of package structure now user can use this library in 3 different ways

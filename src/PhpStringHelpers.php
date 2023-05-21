@@ -103,9 +103,9 @@ if (!function_exists('alternate')) {
 }
 
 if (!function_exists('translate')) {
-    function translate(string $key, string $replace = ''): string
+    function translate(string $key, string $alternative = ''): string|array
     {
-        return strHelpers::translate($key, $replace);
+        return strHelpers::translate($key, $alternative);
     }
 }
 

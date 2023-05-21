@@ -1,4 +1,4 @@
-# helpful set of PHP string helper functions & utilities class
+# Helpful Set Of Php String Helper Functions Utilities Class
 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
@@ -112,21 +112,22 @@ StrUtility::alternate(?string $string, string $alternate = null): string
 - translation methods, for using this method you should create a wrapper function 
 for example 
 
-```
-function <your_wrapper_function_name>(string $key, string $replace = '', string $dirName = 'en')
+```php
+function <your_wrapper_function_name>(string $key, string $alternative = '', string $dirName = 'en')
 {
     $BASE_PATH = // base (root) path of your project
 
     $translatePath = StrUtility::translatePath($BASE_PATH, $dirName);
-    return StrUtility::translate($translatePath . $key, $replace);
+    return StrUtility::translate($translatePath . $key, $alternative);
 }
 ```
 
 < your_wrapper_function_name>('app.title') reference to lang/en/app.php and title array key in app.php
 file app.php must only return associative array.
+this translation methods only work for one level
 
 ```php
-StrUtility::translate(string $key, string $replace = '', string $dirName = 'en'): string
+StrUtility::translate(string $key, string $alternative = ''): string|array
 ```
 
 - wrap given string with wrapper param
