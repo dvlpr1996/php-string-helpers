@@ -412,3 +412,10 @@ if (!function_exists('before')) {
         return strHelpers::before($string, $search);
     }
 }
+
+if (!function_exists('hasSpace')) {
+    function hasSpace(string $string): string
+    {
+        return strHelpers::hasSpace($string);
+    }
+}

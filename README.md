@@ -375,6 +375,10 @@ StrUtility::after(string $string, string $search): string
 StrUtility::before(string $string, string $search): string
 ```
 
+```php
+StrUtility::hasSpace(string $string): bool
+```
+
 ## StrUtility usage as helper functions
 
 String helper functions are global so usage like the following:

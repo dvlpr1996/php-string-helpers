@@ -871,6 +871,17 @@ class StrUtility
         return $this->rmExtraBlank(strstr($string, $search, true));
     }
 
+    /**
+     * Check String For Any Spaces
+     *
+     * @param string $string
+     * @return bool
+     */
+    public function hasSpace(string $string)
+    {
+        return preg_match_all('/\s/', $string) ? true : false;
+    }
+
     private function checkStringForRemoveOperation(string $string, string $word): bool
     {
         $string = strtolower(trim($string));

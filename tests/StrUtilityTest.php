@@ -947,4 +947,16 @@ class StrUtilityTest extends TestCase
         $string = strHelpersTest::before('foo bar baz', 'foo');
         $this->assertEquals('', $string);
     }
+
+    public function testHasSpaceCanReturnTrueValue()
+    {
+        $string = strHelpersTest::hasSpace('foo bar baz');
+        $this->assertTrue($string);
+    }
+
+    public function testHasSpaceCanReturnFalseValue()
+    {
+        $string = strHelpersTest::hasSpace('foo');
+        $this->assertFalse($string);
+    }
 }
