@@ -419,3 +419,59 @@ if (!function_exists('hasSpace')) {
         return strHelpers::hasSpace($string);
     }
 }
+
+if (!function_exists('isEmail')) {
+    function isEmail(string $email): bool
+    {
+        return strHelpers::isEmail($email);
+    }
+}
+
+if (!function_exists('detectCase')) {
+    function detectCase(string $string): string
+    {
+        return strHelpers::detectCase($string);
+    }
+}
+
+if (!function_exists('isLowerCase')) {
+    function isLowerCase(string $string): bool
+    {
+        return strHelpers::isLowerCase($string);
+    }
+}
+
+if (!function_exists('isUpperCase')) {
+    function isUpperCase(string $string): bool
+    {
+        return strHelpers::isUpperCase($string);
+    }
+}
+
+if (!function_exists('isTitleCase')) {
+    function isTitleCase(string $string): bool
+    {
+        return strHelpers::isTitleCase($string);
+    }
+}
+
+if (!function_exists('isSnakeCase')) {
+    function isSnakeCase(string $string): bool
+    {
+        return strHelpers::isSnakeCase($string);
+    }
+}
+
+if (!function_exists('validateUserName')) {
+    function validateUserName(string $userName, int $min = 3, int $max = 20): bool
+    {
+        return strHelpers::validateUserName($userName, $min, $max);
+    }
+}
+
+if (!function_exists('humanFileSize')) {
+    function humanFileSize(int $size, string $type = 'KB'): string
+    {
+        return strHelpers::humanFileSize($size, $type);
+    }
+}

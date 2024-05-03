@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace PhpStringHelpers\utility;
 
+use InvalidArgumentException;
 use PhpStringHelpers\exceptions\UrlIsNotValidException;
 use PhpStringHelpers\exceptions\FileDoesNotExistsException;
 use PhpStringHelpers\exceptions\LanguageFileIsNotArrayException;
@@ -148,8 +149,8 @@ class StrUtility
      */
     public function toSlug(string $string): string
     {
-        $string = preg_replace('/[^\pL\d]+/i', '-', $string);
-        return trim(strtolower(preg_replace('/-+/', '-', $string)), '-');
+        $string = preg_replace('/[^\pL\d]+/u', '-', $string);
+        return strtolower(trim($string, '-'));
     }
 
     /**
@@ -160,7 +161,7 @@ class StrUtility
      */
     public function rmAllBlanks(string $string): string
     {
-        return preg_replace('/[\s]/', '', $string);
+        return preg_replace('/\s+/', '', $string);
     }
 
     /**
@@ -279,10 +280,10 @@ class StrUtility
     {
         if ($length < 4 || $length > 12) return 0;
 
-        $min = str_pad('1', $length, '0');
-        $max = str_pad('9', $length, '9');
+        $min = (int) str_pad('1', $length, '0');
+        $max = (int) str_pad('9', $length, '9');
 
-        return mt_rand((int)$min, (int)$max);
+        return mt_rand($min, $max);
     }
 
     /**
@@ -293,11 +294,12 @@ class StrUtility
      */
     public function clearString(string $data): string
     {
-        $data = stripslashes(trim($data));
+        $data = trim($data);
+        $data = stripslashes($data);
         $data = strip_tags($data);
-        $data = $this->rmExtraBlank($data);
-        $data = html_entity_decode(htmlentities($data));
-        $data = $this->entitiesWrapper($data);
+        $data = preg_replace('/\s+/im', ' ', $data);
+        $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+
         return $data;
     }
 
@@ -877,9 +879,132 @@ class StrUtility
      * @param string $string
      * @return bool
      */
-    public function hasSpace(string $string)
+    public function hasSpace(string $string): bool
     {
-        return preg_match_all('/\s/', $string) ? true : false;
+        return (bool) preg_match('/\s/', $string);
+    }
+
+    /**
+     * a wrapper for FILTER_VALIDATE_EMAIL filter
+     *
+     * @param string $email
+     * @return bool
+     */
+    public function isEmail(string $email)
+    {
+        return (bool) filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
+    /**
+     * Detect Given Word Case
+     *
+     * @param mixed $word
+     * @return string
+     */
+    public function detectCase(string $word): string
+    {
+        if ($this->isLowerCase($word)) return 'lowerCase';
+        if ($this->isUpperCase($word)) return 'upperCase';
+        if ($this->isTitleCase($word)) return 'titleCase';
+        if ($this->isSnakeCase($word)) return 'snakeCase';
+
+        return 'mixedCase';
+    }
+
+    /**
+     * Find Whether The Type Of A Given Word Is Lower Case
+     *
+     * @param string $word
+     * @return boolean
+     */
+    public function isLowerCase(string $word): bool
+    {
+        return preg_match('/^[a-z]+$/', trim($word)) === 1;
+    }
+
+    /**
+     * Find Whether The Type Of A Given Word Is Upper Case
+     *
+     * @param string $word
+     * @return boolean
+     */
+    public function isUpperCase(string $word): bool
+    {
+        return trim($word) === strtoupper($word);
+    }
+
+    /**
+     * Whether The Type Of A Given Word Is Title Case
+     *
+     * @param string $word
+     * @return boolean
+     */
+    public function isTitleCase(string $word): bool
+    {
+        $pattern = '/^(?:\b\p{Lu}\p{Ll}*\b\s*)+$/';
+        return preg_match($pattern, trim($word)) === 1;
+    }
+
+    /**
+     * whether the type of a given Word is SnakeCase
+     *
+     * @param string $word
+     * @return boolean
+     */
+    public function isSnakeCase(string $word): bool
+    {
+        return preg_match('/^[a-z]+(_[a-z]+)*$/', trim($word)) === 1;
+    }
+
+    /**
+     * validateUserName
+     *
+     * @param string $userName
+     * @return boolean
+     */
+    public function validateUserName(string $userName, int $min = 3, int $max = 20): bool
+    {
+        return (bool) preg_match('/^[A-Za-z0-9._-]{' . $min . ',' . $max . '}$/i', $userName);
+    }
+
+    /**
+     * Convert File Size To Human Readable Format.
+     *
+     * This function converts a given file size to a human-readable format,
+     * based on the specified type (e.g., KB, MB, GB).
+     *
+     * @param int $size The file size to convert, in bytes.
+     * @param string $type The type of file size to convert to (e.g., KB, MB, GB).
+     * @return string The file size in human-readable format (e.g., "1.25 MB").
+     * @throws InvalidArgumentException If the provided type is invalid.
+     * @throws InvalidArgumentException If the provided size is negative.
+     */
+    public function humanFileSize(int $size, string $type = 'KB'): string
+    {
+        if ($size < 0) {
+            throw new InvalidArgumentException('File size cannot be negative');
+        }
+
+        if ($size === 0) {
+            return '0 B';
+        }
+
+        $conversionFactors = [
+            'B' => 1,
+            'KB' => 1024,
+            'MB' => 1024 * 1024,
+            'GB' => 1024 * 1024 * 1024,
+            'TB' => 1024 * 1024 * 1024 * 1024,
+            'PB' => 1024 * 1024 * 1024 * 1024 * 1024,
+        ];
+
+        if (!array_key_exists($type, $conversionFactors)) {
+            throw new InvalidArgumentException("Invalid type: $type");
+        }
+
+        $humanReadableSize = $size / $conversionFactors[$type];
+
+        return number_format($humanReadableSize, 2) . ' ' . $type;
     }
 
     private function checkStringForRemoveOperation(string $string, string $word): bool

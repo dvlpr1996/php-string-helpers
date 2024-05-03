@@ -4,208 +4,164 @@ declare(strict_types=1);
 
 namespace PhpStringHelpers\Tests;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use PhpStringHelpers\utility\StrUtility;
 use PhpStringHelpers\exceptions\UrlIsNotValidException;
-use PhpStringHelpers\Facade\StrUtility as strHelpersTest;
 use PhpStringHelpers\exceptions\FileDoesNotExistsException;
 use PhpStringHelpers\exceptions\LanguageFileIsNotArrayException;
 
 /**
  * @covers StrUtility
  */
-class StrUtilityTest extends TestCase
+final class StrUtilityTest extends TestCase
 {
-    public $sampleText = 'somE TexT 444 for? tE34st! @#56$%^ <>';
+    public StrUtility $StrUtility;
     public $basePath = __DIR__ . '/../';
+    public $sampleText = 'somE TexT 444 for? tE34st! @#56$%^ <>';
 
-    public function testToCamelCaseCanReturnStringValue()
+    protected function setUp(): void
     {
-        $string = strHelpersTest::toCamelCase($this->sampleText);
-        $this->assertIsString($string);
+        $this->StrUtility = new StrUtility;
     }
 
-    public function testToCamelCaseCanReturnsStringLikeCamelCase()
+    public function testToCamelCaseCanReturnsStringLikeCamelCase(): void
     {
-        $string = strHelpersTest::toCamelCase($this->sampleText);
+        $string = $this->StrUtility->toCamelCase($this->sampleText);
+
+        $this->assertIsString($string);
         $this->assertEquals('someText444ForTe34st56', $string);
     }
 
-    public function testToPascalCaseCanReturnStringValue()
+    public function testToPascalCaseCanReturnsStringLikePascalCase(): void
     {
-        $string = strHelpersTest::toPascalCase($this->sampleText);
-        $this->assertIsString($string);
-    }
+        $string = $this->StrUtility->toPascalCase($this->sampleText);
 
-    public function testToPascalCaseCanReturnsStringLikePascalCase()
-    {
-        $string = strHelpersTest::toPascalCase($this->sampleText);
+        $this->assertIsString($string);
         $this->assertEquals('SomeText444ForTe34st56', $string);
-    }
-
-    public function testToKebabCaseCanReturnStringValue()
-    {
-        $string = strHelpersTest::toKebabCase($this->sampleText);
-        $this->assertIsString($string);
     }
 
     public function testToKebabCaseCanReturnsStringLikeKebabCase()
     {
-        $string = strHelpersTest::toKebabCase($this->sampleText);
-        $this->assertEquals('some-text-444-for-te34st-56', $string);
-    }
+        $string = $this->StrUtility->toKebabCase($this->sampleText);
 
-    public function testToTitleCaseCanReturnStringValue()
-    {
-        $string = strHelpersTest::toTitleCase($this->sampleText);
         $this->assertIsString($string);
+        $this->assertEquals('some-text-444-for-te34st-56', $string);
     }
 
     public function testToTitleCaseCanReturnsStringLikeTitleCase()
     {
-        $string = strHelpersTest::toTitleCase($this->sampleText);
-        $this->assertEquals('Some Text 444 For Te34st 56', $string);
-    }
+        $string = $this->StrUtility->toTitleCase($this->sampleText);
 
-    public function testToConstantCanReturnStringValue()
-    {
-        $string = strHelpersTest::toConstant($this->sampleText);
         $this->assertIsString($string);
+        $this->assertEquals('Some Text 444 For Te34st 56', $string);
     }
 
     public function testToConstantCanReturnStringLikeConstantCase()
     {
-        $string = strHelpersTest::toConstant($this->sampleText);
-        $this->assertEquals('SOME_TEXT_444_FOR_TE34ST_56', $string);
-    }
+        $string = $this->StrUtility->toConstant($this->sampleText);
 
-    public function testToSnakeCaseCanReturnStringValue()
-    {
-        $string = strHelpersTest::toSnakeCase($this->sampleText);
         $this->assertIsString($string);
+        $this->assertEquals('SOME_TEXT_444_FOR_TE34ST_56', $string);
     }
 
     public function testToSnakeCaseCanReturnStringLikeSnakeCase()
     {
-        $string = strHelpersTest::toSnakeCase($this->sampleText);
-        $this->assertEquals('some_text_444_for_te34st_56', $string);
-    }
+        $string = $this->StrUtility->toSnakeCase($this->sampleText);
 
-    public function testToPathCaseCanReturnStringValue()
-    {
-        $string = strHelpersTest::toPathCase($this->sampleText);
         $this->assertIsString($string);
+        $this->assertEquals('some_text_444_for_te34st_56', $string);
     }
 
     public function testToPathCaseCanReturnStringLikePathCase()
     {
-        $string = strHelpersTest::toPathCase($this->sampleText);
-        $this->assertEquals('some/text/444/for/te34st/56', $string);
-    }
+        $string = $this->StrUtility->toPathCase($this->sampleText);
 
-    public function testToAdaCaseCanReturnStringValue()
-    {
-        $string = strHelpersTest::toAdaCase($this->sampleText);
         $this->assertIsString($string);
+        $this->assertEquals('some/text/444/for/te34st/56', $string);
     }
 
     public function testToAdaCaseCanReturnStringLikeAdaCase()
     {
-        $string = strHelpersTest::toAdaCase($this->sampleText);
-        $this->assertEquals('Some_Text_444_For_Te34st_56', $string);
-    }
+        $string = $this->StrUtility->toAdaCase($this->sampleText);
 
-    public function testDotNotationCanReturnStringValue()
-    {
-        $string = strHelpersTest::dotNotation($this->sampleText);
         $this->assertIsString($string);
+        $this->assertEquals('Some_Text_444_For_Te34st_56', $string);
     }
 
     public function testDotNotationCanReturnStringLikeDotNotation()
     {
-        $string = strHelpersTest::dotNotation($this->sampleText);
-        $this->assertEquals('somE.TexT.444.for.tE34st.56', $string);
-    }
+        $string = $this->StrUtility->dotNotation($this->sampleText);
 
-    public function testEntitiesWrapperCanReturnStringValue()
-    {
-        $string = strHelpersTest::entitiesWrapper($this->sampleText);
         $this->assertIsString($string);
+        $this->assertEquals('somE.TexT.444.for.tE34st.56', $string);
     }
 
     public function testEntitiesWrapperCanReturnEmptyStringIfGivenDataIsNull()
     {
-        $string = strHelpersTest::entitiesWrapper(null);
-        $this->assertEquals('', $string);
-    }
+        $string = $this->StrUtility->entitiesWrapper(null);
 
-    public function testToSlugCanReturnStringValue()
-    {
-        $string = strHelpersTest::toSlug($this->sampleText);
         $this->assertIsString($string);
+        $this->assertEquals('', $string);
     }
 
     public function testToSlugCanReturnStringLikeRegularSlug()
     {
-        $string = strHelpersTest::toSlug($this->sampleText);
-        $this->assertMatchesRegularExpression('/^[a-z0-9]+(?:-[a-z0-9]+)*$/im', $string);
-        $this->assertEquals('some-text-444-for-te34st-56', $string);
-    }
+        $string = $this->StrUtility->toSlug($this->sampleText);
 
-    public function testClearStringCanReturnStringValue()
-    {
-        $string = strHelpersTest::clearString($this->sampleText);
         $this->assertIsString($string);
+        $this->assertEquals('some-text-444-for-te34st-56', $string);
+        $this->assertMatchesRegularExpression('/^[a-z0-9]+(?:-[a-z0-9]+)*$/im', $string);
     }
 
     public function testClearStringCanReturnSafeString(): void
     {
         $string = 'Some$ te%st @teXt l!k# 456 @#$ !-_.*+={[( <script> alert("aleRt TeXt")</script>';
-        $clearStringResults = strHelpersTest::clearString($string);
-        $this->assertMatchesRegularExpression('/[\w\d]+/', $clearStringResults);
-    }
+        $clearStringResults = $this->StrUtility->clearString($string);
 
-    public function testRmAllBlanksCanReturnStringValue()
-    {
-        $string = strHelpersTest::rmAllBlanks($this->sampleText);
         $this->assertIsString($string);
+        $this->assertMatchesRegularExpression('/[\w\d]+/', $clearStringResults);
     }
 
     public function testRmAllBlanksCanRemoveAllBlanksFromString()
     {
-        $string = strHelpersTest::rmAllBlanks($this->sampleText);
+        $string = $this->StrUtility->rmAllBlanks($this->sampleText);
+
+        $this->assertIsString($string);
         $this->assertNotSame($this->sampleText, $string);
         $this->assertMatchesRegularExpression('/[^\s]/', $string);
     }
 
     public function testAlternateCanReturnStringValueIfBothParamsSet()
     {
-        $string = strHelpersTest::alternate('lorem ipsum', 'dolor site');
+        $string = $this->StrUtility->alternate('lorem ipsum', 'dolor site');
         $this->assertIsString($string);
     }
 
     public function testAlternateCanReturnStringValueIfStringParamIsNull()
     {
-        $string = strHelpersTest::alternate(null, 'dolor site');
+        $string = $this->StrUtility->alternate(null, 'dolor site');
         $this->assertIsString($string);
     }
 
     public function testAlternateCanReturnStringValueIfAlternateParamIsNull()
     {
-        $string = strHelpersTest::alternate('lorem ipsum', null);
+        $string = $this->StrUtility->alternate('lorem ipsum', null);
         $this->assertIsString($string);
     }
 
     public function testAlternateCanReturnStringValueIfBothParamAreNull()
     {
-        $string = strHelpersTest::alternate(null, null);
+        $string = $this->StrUtility->alternate(null, null);
+
         $this->assertIsString($string);
         $this->assertEquals('not defined', $string);
     }
 
     public function testTranslateCanReturnStringValue()
     {
-        $translatePath = strHelpersTest::translatePath(realpath($this->basePath), 'en');
-        $string = strHelpersTest::translate($translatePath . 'app.title');
+        $translatePath = $this->StrUtility->translatePath(realpath($this->basePath), 'en');
+        $string = $this->StrUtility->translate($translatePath . 'app.title');
         $this->assertIsString($string);
     }
 
@@ -213,35 +169,31 @@ class StrUtilityTest extends TestCase
     {
         $this->expectException(FileDoesNotExistsException::class);
 
-        $translatePath = strHelpersTest::translatePath(realpath($this->basePath), 'en');
-        strHelpersTest::translate($translatePath . 'validation.first_name');
+        $translatePath = $this->StrUtility->translatePath(realpath($this->basePath), 'en');
+        $this->StrUtility->translate($translatePath . 'validation.first_name');
     }
 
     public function testTranslateCanThrowExceptionIfLangFileDoesNotInArrayType()
     {
         $this->expectException(LanguageFileIsNotArrayException::class);
-        $translatePath = strHelpersTest::translatePath(realpath($this->basePath), 'en');
-        strHelpersTest::translate($translatePath . 'auth.title');
+
+        $translatePath = $this->StrUtility->translatePath(realpath($this->basePath), 'en');
+        $this->StrUtility->translate($translatePath . 'auth.title');
     }
 
     public function testTranslateCanReturnReplaceParamIfGivenKeyDoesNotExists()
     {
-        $translatePath = strHelpersTest::translatePath(realpath($this->basePath), 'en');
-        $string = strHelpersTest::translate($translatePath . 'app.site', 'replace text');
+        $translatePath = $this->StrUtility->translatePath(realpath($this->basePath), 'en');
+        $string = $this->StrUtility->translate($translatePath . 'app.site', 'replace text');
         $this->assertEquals('replace text', $string);
-    }
-
-    public function testFilePathCanReturnStringValue()
-    {
-        $basePath = realpath($this->basePath);
-        $filePath = strHelpersTest::filePath($basePath . '.lang.en.app');
-        $this->assertIsString($filePath);
     }
 
     public function testFilePathReturnedFilePathIfExists()
     {
         $basePath = realpath($this->basePath);
-        $filePath = strHelpersTest::filePath($basePath . '.lang.en.app');
+        $filePath = $this->StrUtility->filePath($basePath . '.lang.en.app');
+
+        $this->assertIsString($filePath);
         $this->assertFileExists($filePath);
         $this->assertFileEquals('lang/en/app.php', $filePath);
         $this->assertFileIsReadable($filePath);
@@ -250,93 +202,95 @@ class StrUtilityTest extends TestCase
     public function testPathThrowAnExceptionsIfFileDoesNotExists()
     {
         $this->expectException(FileDoesNotExistsException::class);
-        strHelpersTest::filePath('lang.en.config.auth');
+
+        $this->StrUtility->filePath('lang.en.config.auth');
     }
 
     public function testWrapperCanReturnStringValue()
     {
-        $string = strHelpersTest::wrapper("foo bar", "*");
+        $string = $this->StrUtility->wrapper("foo bar", "*");
         $this->assertIsString($string);
     }
 
     public function testWrapperCanReturnStringValueIfStringParamIsInt()
     {
-        $string = strHelpersTest::wrapper(123456, "*");
+        $string = $this->StrUtility->wrapper(123456, "*");
         $this->assertIsString($string);
     }
 
     public function testWrapperCanWrappingStringParam()
     {
-        $string = strHelpersTest::wrapper('foo', "*-*");
+        $string = $this->StrUtility->wrapper('foo', "*-*");
         $this->assertEquals('*-*foo*-*', $string);
     }
 
     public function testGeneratePinCanReturnsIntegerValue()
     {
-        $pin = strHelpersTest::generatePin();
+        $pin = $this->StrUtility->generatePin();
         $this->assertIsInt($pin);
     }
 
     public function testGeneratePinLengthParamIsGreaterThanFour()
     {
         $length = 4;
-        strHelpersTest::generatePin($length);
+        $this->StrUtility->generatePin($length);
         $this->assertGreaterThanOrEqual(4, $length);
     }
 
     public function testGeneratePinLengthParamIsLessThanTwelve()
     {
         $length = 12;
-        strHelpersTest::generatePin($length);
+        $this->StrUtility->generatePin($length);
         $this->assertLessThanOrEqual(12, $length);
     }
 
     public function testGeneratePinReturnZeroIfLengthParamIsNotInRange()
     {
-        $pin = strHelpersTest::generatePin(24);
+        $pin = $this->StrUtility->generatePin(24);
         $this->assertEquals(0, $pin);
     }
 
     public function testRandomCharCanReturnStringValue()
     {
-        $string = strHelpersTest::randomChar();
+        $string = $this->StrUtility->randomChar();
         $this->assertIsString($string);
     }
 
     public function testRandomHexCanReturnStringValue()
     {
-        $string = strHelpersTest::randomHex();
+        $string = $this->StrUtility->randomHex();
         $this->assertIsString($string);
     }
 
     public function testRandomHexReturnValueStartsWithPoundSign()
     {
-        $string = strHelpersTest::randomHex();
+        $string = $this->StrUtility->randomHex();
         $this->assertStringStartsWith('#', $string);
     }
 
     public function testRandomHexReturnValueIsValidHex()
     {
-        $string = strHelpersTest::randomHex();
+        $string = $this->StrUtility->randomHex();
+
         $this->assertEquals(7, strlen($string));
         $this->assertMatchesRegularExpression('/^[0-9ABCDEFabcdef#]+$/i', $string);
     }
 
     public function testRandomRgbCanReturnStringValue()
     {
-        $string = strHelpersTest::randomRgb();
+        $string = $this->StrUtility->randomRgb();
         $this->assertIsString($string);
     }
 
     public function testRandomRgbReturnValueIsValidRgb()
     {
-        $string = strHelpersTest::randomRgb();
+        $string = $this->StrUtility->randomRgb();
         $this->assertMatchesRegularExpression('/^[0-9.]+$/i', $string);
     }
 
     public function testRmLinkCanReturnStringValue()
     {
-        $string = strHelpersTest::rmLink('lorem www.github.com ipsum site');
+        $string = $this->StrUtility->rmLink('lorem www.github.com ipsum site');
         $this->assertIsString($string);
     }
 
@@ -355,107 +309,111 @@ class StrUtilityTest extends TestCase
         ];
 
         foreach ($inputs as $input) {
-            $string = strHelpersTest::rmLink($input);
+            $string = $this->StrUtility->rmLink($input);
             $this->assertEquals('lorem ipsum site', $string);
         }
     }
 
     public function testLimitCharCanReturnStringValue()
     {
-        $string = strHelpersTest::limitChar('foo bar', 5);
+        $string = $this->StrUtility->limitChar('foo bar', 5);
         $this->assertIsString($string);
     }
 
     public function testLimitCharCanLimitGivenString()
     {
-        $string = strHelpersTest::limitChar('foo bar', 2);
+        $string = $this->StrUtility->limitChar('foo bar', 2);
         $this->assertEquals('foo b...', $string);
     }
 
     public function testLimitCharCanReturnGivenStringIfLengthParamIsBiggerThanStringLength()
     {
-        $string = strHelpersTest::limitChar('foo bar', 8);
+        $string = $this->StrUtility->limitChar('foo bar', 8);
         $this->assertEquals('foo bar', $string);
     }
 
     public function testGenerateIdCanReturnStringValue()
     {
-        $string = strHelpersTest::generateId();
+        $string = $this->StrUtility->generateId();
+
         $this->assertIsString($string);
         $this->assertMatchesRegularExpression('/^[0-9a-zA-Z-]+/i', $string);
     }
 
     public function testRmNumbersCanReturnStringValue()
     {
-        $string = strHelpersTest::rmNumbers($this->sampleText);
+        $string = $this->StrUtility->rmNumbers($this->sampleText);
+
         $this->assertIsString($string);
         $this->assertMatchesRegularExpression('/^[\w\W]+$/i', $string);
     }
 
     public function testRmNumbersReturnEmptyStringIfGivenNumericStringParam()
     {
-        $string = strHelpersTest::rmNumbers("0123456789");
+        $string = $this->StrUtility->rmNumbers("0123456789");
         $this->assertEquals('', $string);
     }
 
     public function testRmCharactersCanReturnStringValue()
     {
-        $string = strHelpersTest::rmCharacters($this->sampleText);
+        $string = $this->StrUtility->rmCharacters($this->sampleText);
+
         $this->assertIsString($string);
         $this->assertMatchesRegularExpression('/[-_a-zA-Z\W]+/i', $string);
     }
 
     public function testRmCharactersReturnEmptyStringIfGivenEmptyStringParam()
     {
-        $string = strHelpersTest::rmCharacters('');
+        $string = $this->StrUtility->rmCharacters('');
         $this->assertEquals('', $string);
     }
 
     public function testRmExtraBlankCanReturnStringValue()
     {
-        $string = strHelpersTest::rmExtraBlank($this->sampleText);
+        $string = $this->StrUtility->rmExtraBlank($this->sampleText);
         $this->assertIsString($string);
     }
 
     public function testRmExtraBlankReturnEmptyStringIfGivenEmptyStringParam()
     {
-        $string = strHelpersTest::rmExtraBlank('');
+        $string = $this->StrUtility->rmExtraBlank('');
         $this->assertEquals('', $string);
     }
 
     public function testHexToRgbCanReturnStringValueIfColorParamIsValid()
     {
-        $color = strHelpersTest::hexToRgb('#bada55');
+        $color = $this->StrUtility->hexToRgb('#bada55');
         $this->assertIsString($color);
     }
 
     public function testHexToRgbCanReturnNullValueIfColorParamIsNotValid()
     {
-        $color = strHelpersTest::hexToRgb('#bada4r');
+        $color = $this->StrUtility->hexToRgb('#bada4r');
         $this->assertNull($color);
     }
 
     public function testHexToRgbCanReturnValidRgbColor()
     {
-        $color = strHelpersTest::hexToRgb('#bada44');
+        $color = $this->StrUtility->hexToRgb('#bada44');
         $this->assertMatchesRegularExpression('/^[0-9.]+$/i', $color);
     }
 
     public function testRgbToHexCanReturnStringValueIfColorParamIsValid()
     {
-        $color = strHelpersTest::rgbToHex('250.230.100');
+        $color = $this->StrUtility->rgbToHex('250.230.100');
         $this->assertIsString($color);
     }
 
     public function testRgbToHexCanReturnNullValueIfColorParamIsNotValid()
     {
-        $color = strHelpersTest::rgbToHex('25a.23b.100');
+        $color = $this->StrUtility->rgbToHex('25a.23b.100');
         $this->assertNull($color);
     }
 
     public function testRgbToHexCanReturnValidHexColor()
     {
-        $color = strHelpersTest::rgbToHex('250.230.100');
+        $color = $this->StrUtility->rgbToHex('250.230.100');
+
         $this->assertEquals(7, strlen($color));
         $this->assertMatchesRegularExpression('/^[0-9ABCDEFabcdef#]+$/i', $color);
         $this->assertStringStartsWith('#', $color);
@@ -463,31 +421,26 @@ class StrUtilityTest extends TestCase
 
     public function testGenerateAnchorCanReturnStringValue()
     {
-        $anchorText = strHelpersTest::generateAnchor('example link', 'https://github.com/');
+        $anchorText = $this->StrUtility->generateAnchor('example link', 'https://github.com/');
         $this->assertIsString($anchorText);
     }
 
     public function testGenerateAnchorCanThrowExceptionIfHrefParamIsNotValid()
     {
         $this->expectException(UrlIsNotValidException::class);
-        strHelpersTest::generateAnchor('example link', '12github.#$co');
+        $this->StrUtility->generateAnchor('example link', '12github.#$co');
     }
 
     public function testGetEncodingCanReturnStringValue()
     {
-        $string = strHelpersTest::getEncoding('foo bar baz');
+        $string = $this->StrUtility->getEncoding('foo bar baz');
         $this->assertIsString($string);
-    }
-
-    public function testIsUtf8CanReturnBoolValue()
-    {
-        $string = strHelpersTest::isUtf8('foo bar baz');
-        $this->assertIsBool($string);
     }
 
     public function testIsUtf8CanReturnTrueWhenGivenUtf8Encoding()
     {
-        $string = strHelpersTest::isUtf8('foo bar baz');
+        $string = $this->StrUtility->isUtf8('foo bar baz');
+
         $this->assertIsBool($string);
         $this->assertTrue($string);
     }
@@ -495,13 +448,7 @@ class StrUtilityTest extends TestCase
     public function testRmDuplicateWordsCanReturnStringValue()
     {
         $string = "lorem ipsum dolor site amet loreM SITE";
-        $string = strHelpersTest::rmDuplicateWords($string);
-        $this->assertIsString($string);
-    }
-
-    public function testRmRightCharCanReturnStringValue()
-    {
-        $string = strHelpersTest::rmRightChar('foo bar', 2);
+        $string = $this->StrUtility->rmDuplicateWords($string);
         $this->assertIsString($string);
     }
 
@@ -510,8 +457,9 @@ class StrUtilityTest extends TestCase
         $testString = 'foo bar';
         $stringLength = strlen($testString);
         $num = $stringLength + 5;
-        $string = strHelpersTest::rmRightChar($testString, $num);
+        $string = $this->StrUtility->rmRightChar($testString, $num);
 
+        $this->assertIsString($string);
         $this->assertEquals($testString, $string);
     }
 
@@ -520,16 +468,10 @@ class StrUtilityTest extends TestCase
         $num = 2;
         $string = 'foo bar';
         $stringLength = strlen($string);
-        $string = strHelpersTest::rmRightChar($string, $num);
+        $string = $this->StrUtility->rmRightChar($string, $num);
 
         $this->assertEquals($stringLength - $num, strlen($string));
         $this->assertStringEndsWith($string, 'foo b');
-    }
-
-    public function testRmLeftCharCanReturnStringValue()
-    {
-        $string = strHelpersTest::rmLeftChar('foo bar', 2);
-        $this->assertIsString($string);
     }
 
     public function testRmLeftCharCanRemoveCharacterFromLeftSideOfStringBaseOnNumParam()
@@ -537,8 +479,9 @@ class StrUtilityTest extends TestCase
         $num = 2;
         $string = 'foo bar';
         $stringLength = strlen($string);
-        $string = strHelpersTest::rmLeftChar($string, $num);
+        $string = $this->StrUtility->rmLeftChar($string, $num);
 
+        $this->assertIsString($string);
         $this->assertEquals($stringLength - $num, strlen($string));
         $this->assertStringStartsWith($string, 'o bar');
     }
@@ -548,15 +491,9 @@ class StrUtilityTest extends TestCase
         $testString = 'foo bar';
         $stringLength = strlen($testString);
         $num = $stringLength + 5;
-        $string = strHelpersTest::rmLeftChar($testString, $num);
+        $string = $this->StrUtility->rmLeftChar($testString, $num);
 
         $this->assertEquals($testString, $string);
-    }
-
-    public function testRmBothSideCharCanReturnStringValue()
-    {
-        $string = strHelpersTest::rmBothSideChar('foo bar', 2);
-        $this->assertIsString($string);
     }
 
     public function testRmBothSideCharCanRemoveCharacterFromBothSideOfStringBaseOnNumParam()
@@ -564,399 +501,612 @@ class StrUtilityTest extends TestCase
         $num = 2;
         $string = 'foo bar';
         $stringLength = strlen($string);
-        $string = strHelpersTest::rmBothSideChar($string, $num);
+        $string = $this->StrUtility->rmBothSideChar($string, $num);
 
+        $this->assertIsString($string);
         $this->assertEquals($stringLength - $num * 2, strlen($string));
         $this->assertStringStartsWith($string, 'o b');
     }
 
     public function testIsJsonCanReturnBoolValue()
     {
-        $result = strHelpersTest::isJson('{"name":"john"}');
+        $result = $this->StrUtility->isJson('{"name":"john"}');
         $this->assertIsBool($result);
     }
 
     public function testIsJsonCanReturnFalseIfGivenDataIsNotAJsonType()
     {
-        $result = strHelpersTest::isJson('["name"=>"john"]');
+        $result = $this->StrUtility->isJson('["name"=>"john"]');
         $this->assertTrue(!$result);
     }
 
     public function testIsJsonCanReturnsFalseIfGivenDataIsEmpty()
     {
-        $result = strHelpersTest::isJson([]);
+        $result = $this->StrUtility->isJson([]);
         $this->assertTrue(!$result);
     }
 
     public function testIsJsonCanReturnsFalseIfGivenDataIsString()
     {
-        $result = strHelpersTest::isJson('foo');
+        $result = $this->StrUtility->isJson('foo');
         $this->assertTrue(!$result);
-    }
-
-    public function testPureStringCanReturnStringValue()
-    {
-        $string = strHelpersTest::pureString($this->sampleText);
-        $this->assertIsString($string);
     }
 
     public function testPureStringCanReturnOnlyString()
     {
-        $string = strHelpersTest::pureString($this->sampleText);
-        $this->assertMatchesRegularExpression('/[A-Za-z]+$/i', $string);
-    }
+        $string = $this->StrUtility->pureString($this->sampleText);
 
-    public function testIsContainsCanReturnBooleanValue()
-    {
-        $string = strHelpersTest::isContains('foo bar', 'foo');
-        $this->assertIsBool($string);
+        $this->assertIsString($string);
+        $this->assertMatchesRegularExpression('/[A-Za-z]+$/i', $string);
     }
 
     public function testIsContainsCanReturnTrueIfSearchParamIsExistsInGivenStringParam()
     {
-        $string = strHelpersTest::isContains('foo bar', 'foo');
+        $string = $this->StrUtility->isContains('foo bar', 'foo');
         $this->assertTrue($string);
     }
 
     public function testIsContainsCanReturnFalseIfSearchParamIsNotExistsInGivenStringParam()
     {
-        $string = strHelpersTest::isContains('foo bar', 'baz');
+        $string = $this->StrUtility->isContains('foo bar', 'baz');
         $this->assertTrue(!$string);
     }
 
     public function testIsContainsCanReturnBooleanValueInCaseSensitiveIsTrue()
     {
-        $string = strHelpersTest::isContains('foo bar', 'Foo', true);
+        $string = $this->StrUtility->isContains('foo bar', 'Foo', true);
         $this->assertIsBool($string);
     }
 
     public function testIsContainsCanReturnTrueIfSearchParamIsExistsInGivenStringParamInCaseSensitiveIsTrue()
     {
-        $string = strHelpersTest::isContains('FOo bar', 'FOo', true);
+        $string = $this->StrUtility->isContains('FOo bar', 'FOo', true);
         $this->assertTrue($string);
     }
 
     public function testIsContainsCanReturnFalseIfSearchParamIsNotExistsInGivenStringParamInCaseSensitiveIsTrue()
     {
-        $string = strHelpersTest::isContains('foo bar', 'baz', true);
+        $string = $this->StrUtility->isContains('foo bar', 'baz', true);
         $this->assertTrue(!$string);
     }
 
     public function testIsContainsCanReturnFalseSearchOrStringParamsAreEmpty()
     {
-        $string = strHelpersTest::isContains('foo bar', '');
+        $string = $this->StrUtility->isContains('foo bar', '');
         $this->assertTrue(!$string);
     }
 
     public function testIsStartWithCanReturnBooValue()
     {
-        $string = strHelpersTest::isStartWith('foo', 'f');
+        $string = $this->StrUtility->isStartWith('foo', 'f');
         $this->assertIsBool($string);
     }
 
     public function testIsStartWithCanReturnTrueIfGivenStringStartWithSearchParam()
     {
-        $string = strHelpersTest::isStartWith('foo', 'f');
+        $string = $this->StrUtility->isStartWith('foo', 'f');
         $this->assertTrue($string);
     }
 
     public function testIsStartWithCanReturnFalseIfStringOrSearchParamIsEmpty()
     {
-        $string = strHelpersTest::isStartWith('', '');
+        $string = $this->StrUtility->isStartWith('', '');
         $this->assertTrue(!$string);
     }
 
     public function testLastWordCanReturnStringValue()
     {
-        $lastWord = strHelpersTest::lastWord('foo bar baz');
+        $lastWord = $this->StrUtility->lastWord('foo bar baz');
         $this->assertIsString($lastWord);
     }
 
     public function testLastWordCanReturnLastWordOfGivenString()
     {
-        $lastWord = strHelpersTest::lastWord('baz');
+        $lastWord = $this->StrUtility->lastWord('baz');
         $this->assertStringEndsWith('baz', $lastWord);
     }
 
     public function testLastWordCanReturnEmptyStringInGivenEmptyString()
     {
-        $lastWord = strHelpersTest::lastWord('');
+        $lastWord = $this->StrUtility->lastWord('');
         $this->assertEquals('', $lastWord);
-    }
-
-    public function testFirstWordCanReturnStringValue()
-    {
-        $firstWord = strHelpersTest::firstWord('foo bar baz');
-        $this->assertIsString($firstWord);
     }
 
     public function testFirstWordCanReturnFirstWordOfGivenString()
     {
-        $firstWord = strHelpersTest::firstWord('foo bar baz');
+        $firstWord = $this->StrUtility->firstWord('foo bar baz');
+
+        $this->assertIsString($firstWord);
         $this->assertStringEndsWith('foo', $firstWord);
     }
 
     public function testFirstWordCanReturnEmptyStringInGivenEmptyString()
     {
-        $firstWord = strHelpersTest::firstWord('');
+        $firstWord = $this->StrUtility->firstWord('');
         $this->assertEquals('', $firstWord);
-    }
-
-    public function testGetFirstNumbersCanReturnStringValue()
-    {
-        $firstNumber = strHelpersTest::getFirstNumbers('2bar0 2foo 2baz');
-        $this->assertIsString($firstNumber);
     }
 
     public function testGetFirstNumbersCanReturnEmptyStringIfGivenStringParamDoesNotStartWithNumber()
     {
-        $firstNumber = strHelpersTest::getFirstNumbers('bar5 2foo 3baz');
-        $this->assertEquals('', $firstNumber);
-    }
+        $firstNumber = $this->StrUtility->getFirstNumbers('bar5 2foo 3baz');
 
-    public function testGetLastNumbersCanReturnStringValue()
-    {
-        $lastNumber = strHelpersTest::getLastNumbers('2bar0 2foo 2baz545');
-        $this->assertIsString($lastNumber);
+        $this->assertIsString($firstNumber);
+        $this->assertEquals('', $firstNumber);
     }
 
     public function testGetLastNumbersCanReturnEmptyStringIfGivenStringParamDoesNotEndingWithNumber()
     {
-        $lastNumber = strHelpersTest::getLastNumbers('bar5 2foo 3baz');
+        $lastNumber = $this->StrUtility->getLastNumbers('bar5 2foo 3baz');
+
+        $this->assertIsString($lastNumber);
         $this->assertEquals('', $lastNumber);
     }
 
     public function testGetLastNumbersCanReturnEmptyStringIfGivenStringParamIsEmpty()
     {
-        $lastNumber = strHelpersTest::getLastNumbers('');
+        $lastNumber = $this->StrUtility->getLastNumbers('');
         $this->assertEquals('', $lastNumber);
-    }
-
-    public function testRmBeginningNumbersCanReturnStringValue()
-    {
-        $string = strHelpersTest::rmBeginningNumbers('2bar0 2foo 2baz545');
-        $this->assertIsString($string);
     }
 
     public function testRmBeginningNumbersCanRemoveNumbersFromTheBeginningOfWords()
     {
-        $string = strHelpersTest::rmBeginningNumbers('5foo 66b5ar88 555 321b1az321');
-        $this->assertEquals('foo b5ar88 b1az321', $string);
-    }
+        $string = $this->StrUtility->rmBeginningNumbers('5foo 66b5ar88 555 321b1az321');
 
-    public function testRmEndingNumbersCanReturnStringValue()
-    {
-        $string = strHelpersTest::rmEndingNumbers('2bar0 2foo 2baz545');
         $this->assertIsString($string);
+        $this->assertEquals('foo b5ar88 b1az321', $string);
     }
 
     public function testRmEndingNumbersCanRemoveNumbersFromEndingOfWords()
     {
-        $string = strHelpersTest::rmEndingNumbers('5foo 66b5ar55 555 321b1az321');
+        $string = $this->StrUtility->rmEndingNumbers('5foo 66b5ar55 555 321b1az321');
+
+        $this->assertIsString($string);
         $this->assertEquals('5foo 66b5ar 321b1az', $string);
     }
 
     public function testConvertToUtf8CanReturnStringValue()
     {
-        $string = strHelpersTest::convertToUtf8('bar foo baz');
+        $string = $this->StrUtility->convertToUtf8('bar foo baz');
         $this->assertIsString($string);
     }
 
     public function testConvertToUtf8CanReturnFalseValueIfCanNotConvert()
     {
-        $string = strHelpersTest::convertToUtf8('');
+        $string = $this->StrUtility->convertToUtf8('');
         $this->assertTrue(!$string);
-    }
-
-    public function testIncrementByCanReturnStringValue()
-    {
-        $string = strHelpersTest::incrementBy('bar');
-        $this->assertIsString($string);
     }
 
     public function testIncrementByCanReturnGivenStringIfDoesNotEndingWithNumbers()
     {
-        $string = strHelpersTest::incrementBy('bar');
+        $string = $this->StrUtility->incrementBy('bar');
+
+        $this->assertIsString($string);
         $this->assertEquals('bar', $string);
     }
 
     public function testIncrementByCanIncrementGivenString()
     {
-        $string = strHelpersTest::incrementBy('bar0', '*');
+        $string = $this->StrUtility->incrementBy('bar0', '*');
         $this->assertEquals('bar*1', $string);
     }
 
     public function testDecrementByCanReturnStringValue()
     {
-        $string = strHelpersTest::decrementBy('bar');
+        $string = $this->StrUtility->decrementBy('bar');
         $this->assertIsString($string);
     }
 
     public function testDecrementByCanDecrementGivenString()
     {
-        $string = strHelpersTest::decrementBy('bar1', '*');
+        $string = $this->StrUtility->decrementBy('bar1', '*');
         $this->assertEquals('bar*0', $string);
-    }
-
-    public function testRmLastWordCanReturnStringValue()
-    {
-        $string = strHelpersTest::rmLastWord('foo bar baz');
-        $this->assertIsString($string);
     }
 
     public function testRmLastWordCanRemoveLastWordOfGivenString()
     {
-        $string = strHelpersTest::rmLastWord('foo bar baz 123');
-        $this->assertEquals('foo bar baz', $string);
-    }
+        $string = $this->StrUtility->rmLastWord('foo bar baz 123');
 
-    public function testRmFirstWordCanReturnStringValue()
-    {
-        $string = strHelpersTest::rmFirstWord('foo bar baz');
         $this->assertIsString($string);
+        $this->assertEquals('foo bar baz', $string);
     }
 
     public function testRmFirstWordCanRemoveFirstWordOfGivenString()
     {
-        $string = strHelpersTest::rmFirstWord('12 123 foo bar baz');
+        $string = $this->StrUtility->rmFirstWord('12 123 foo bar baz');
+
+        $this->assertIsString($string);
         $this->assertEquals('123 foo bar baz', $string);
     }
 
     public function testIsSlugCanReturnBooleanValue()
     {
-        $slug = strHelpersTest::is_slug('foo-bar-baz');
+        $slug = $this->StrUtility->is_slug('foo-bar-baz');
         $this->assertIsBool($slug);
     }
 
     public function testIsSlugReturnFalseIfGivenStringIsNotASlug()
     {
-        $slug = strHelpersTest::is_slug('foo bar baz');
+        $slug = $this->StrUtility->is_slug('foo bar baz');
         $this->assertNotTrue($slug);
     }
 
     public function testIsSlugReturnTrueIfGivenStringIsASlug()
     {
-        $slug = strHelpersTest::is_slug('132Foo-12bar-3432az');
+        $slug = $this->StrUtility->is_slug('132Foo-12bar-3432az');
         $this->assertTrue($slug);
     }
 
     public function testIsIpV4CanReturnBooleanValue()
     {
-        $ip = strHelpersTest::is_ipv4('127.0.0.1');
+        $ip = $this->StrUtility->is_ipv4('127.0.0.1');
         $this->assertIsBool($ip);
     }
 
     public function testIsIpV4CanReturnFalseIfGivenIp4IsNotValid()
     {
-        $ip = strHelpersTest::is_ipv4('127.0.0.256');
+        $ip = $this->StrUtility->is_ipv4('127.0.0.256');
         $this->assertFalse($ip);
     }
 
     public function testIsIpV4CanReturnTrueIfGivenIp4IsValid()
     {
-        $ip = strHelpersTest::is_ipv4('127.0.0.255');
+        $ip = $this->StrUtility->is_ipv4('127.0.0.255');
         $this->assertTrue($ip);
     }
 
     public function testIsIpV4CanReturnFalseIfGivenIpParamIsEmpty()
     {
-        $ip = strHelpersTest::is_ipv4('');
+        $ip = $this->StrUtility->is_ipv4('');
         $this->assertFalse($ip);
     }
 
     public function testIsIpV4CanReturnFalseIfGivenIpParamIsNotString()
     {
-        $ip = strHelpersTest::is_ipv4('foo bar');
+        $ip = $this->StrUtility->is_ipv4('foo bar');
         $this->assertFalse($ip);
     }
 
     public function testIsIpV6CanReturnBooleanValue()
     {
-        $ip = strHelpersTest::is_ipv6('2001:0db8:0000:0000:0000:ff00:0042:8329');
+        $ip = $this->StrUtility->is_ipv6('2001:0db8:0000:0000:0000:ff00:0042:8329');
         $this->assertIsBool($ip);
     }
 
     public function testIsIpV6CanReturnFalseIfGivenIp6IsNotValid()
     {
-        $ip = strHelpersTest::is_ipv6('127.0.0.1');
+        $ip = $this->StrUtility->is_ipv6('127.0.0.1');
         $this->assertFalse($ip);
     }
 
     public function testIsIpV6CanReturnTrueIfGivenIp6IsValid()
     {
-        $ip = strHelpersTest::is_ipv6('2001:0db8:0000:0000:0000:ff00:0042:8329');
+        $ip = $this->StrUtility->is_ipv6('2001:0db8:0000:0000:0000:ff00:0042:8329');
         $this->assertTrue($ip);
     }
 
     public function testIsIpV6CanReturnFalseIfGivenIpParamIsEmpty()
     {
-        $ip = strHelpersTest::is_ipv6('');
+        $ip = $this->StrUtility->is_ipv6('');
         $this->assertFalse($ip);
     }
 
     public function testIsIpV6CanReturnFalseIfGivenIpParamIsNotString()
     {
-        $ip = strHelpersTest::is_ipv6('foo bar baz');
+        $ip = $this->StrUtility->is_ipv6('foo bar baz');
         $this->assertFalse($ip);
     }
 
     public function testAfterCanReturnStringValue()
     {
-        $string = strHelpersTest::after('foo bar baz', 'bar');
+        $string = $this->StrUtility->after('foo bar baz', 'bar');
         $this->assertIsString($string);
     }
 
     public function testAfterCanReturnStringParamIfStringParamIsEmpty()
     {
-        $string = strHelpersTest::after('', 'foo');
+        $string = $this->StrUtility->after('', 'foo');
         $this->assertEquals('', $string);
     }
 
     public function testAfterCanReturnStringParamIfSearchIsEmpty()
     {
-        $string = strHelpersTest::after('foo bar baz', '');
+        $string = $this->StrUtility->after('foo bar baz', '');
         $this->assertEquals('foo bar baz', $string);
     }
 
     public function testAfterCanRemoveTheWordsBeforeTheSearchParam()
     {
-        $string = strHelpersTest::after('foo bar baz', 'bar');
+        $string = $this->StrUtility->after('foo bar baz', 'bar');
         $this->assertEquals('baz', $string);
     }
 
     public function testBeforeCanReturnStringValue()
     {
-        $string = strHelpersTest::before('foo bar baz', 'bar');
+        $string = $this->StrUtility->before('foo bar baz', 'bar');
         $this->assertIsString($string);
     }
 
     public function testBeforeCanReturnStringParamIfStringParamIsEmpty()
     {
-        $string = strHelpersTest::before('', 'foo');
+        $string = $this->StrUtility->before('', 'foo');
         $this->assertEquals('', $string);
     }
 
     public function testBeforeCanReturnStringParamIfSearchIsEmpty()
     {
-        $string = strHelpersTest::before('foo bar baz', '');
+        $string = $this->StrUtility->before('foo bar baz', '');
         $this->assertEquals('foo bar baz', $string);
     }
 
     public function testBeforeCanRemoveTheWordsAfterTheSearchParam()
     {
-        $string = strHelpersTest::before('foo bar baz', 'foo');
+        $string = $this->StrUtility->before('foo bar baz', 'foo');
         $this->assertEquals('', $string);
     }
 
     public function testHasSpaceCanReturnTrueValue()
     {
-        $string = strHelpersTest::hasSpace('foo bar baz');
+        $string = $this->StrUtility->hasSpace('foo bar baz');
         $this->assertTrue($string);
     }
 
     public function testHasSpaceCanReturnFalseValue()
     {
-        $string = strHelpersTest::hasSpace('foo');
+        $string = $this->StrUtility->hasSpace('foo');
         $this->assertFalse($string);
+    }
+
+    public function testIsEmailCanReturnTrueValue()
+    {
+        $emails = [
+            'johndoe@gmail.com',
+            'john_doe@gmail.com',
+            'john34doe@gmail.com',
+            '14324@gmail.com',
+            'example@gmail.com',
+            'example@5646.com',
+            'johndoe@example.com',
+        ];
+
+        foreach ($emails as $email) {
+            $email = $this->StrUtility->isEmail($email);
+            $this->assertTrue($email);
+        }
+    }
+
+    public function testIsEmailCanReturnFalseValueIfAddressIsNotValid()
+    {
+        $emails = [
+            '§john@gmail.com',
+            'john_doe§@gmail.com',
+            'john34doe.com.@gmail.com',
+            '14324@com',
+            'example#gmail.com',
+            '«@5646.com',
+            'johndoe@example.«',
+        ];
+
+        foreach ($emails as $email) {
+            $email = $this->StrUtility->isEmail($email);
+            $this->assertFalse($email);
+        }
+    }
+
+    public function testDetectLowerCaseMethodCanReturnLowercase(): void
+    {
+        $this->assertEquals('lowerCase', $this->StrUtility->detectCase('lowercase'));
+    }
+
+    public function testDetectUpperCaseMethodCanReturnUppercase(): void
+    {
+        $this->assertEquals('upperCase', $this->StrUtility->detectCase('UPPERCASE'));
+    }
+
+    public function testDetectTitleCaseMethodCanReturnTitleCase(): void
+    {
+        $words = [
+            'Title Case',
+            'Title Case Again',
+            'Title Case Again Ti Tle Case',
+        ];
+
+        foreach ($words as $word) {
+            $this->assertEquals('titleCase', $this->StrUtility->detectCase($word));
+        }
+    }
+
+    public function testDetectSnakeCaseMethodCanReturnSnakeCase(): void
+    {
+        $words = [
+            'snake_case',
+            'snake_case_lorem',
+        ];
+
+        foreach ($words as $word) {
+            $this->assertEquals('snakeCase', $this->StrUtility->detectCase($word));
+        }
+    }
+
+    public function testDetectMixedCase(): void
+    {
+        $this->assertEquals('mixedCase', $this->StrUtility->detectCase('MixedCase'));
+    }
+
+    public function testIsLowerCaseCanReturnTheTrueValueIfGivenWordIsLowerCase()
+    {
+        $words = [
+            'loremipsum',
+            'foobarbaz',
+        ];
+
+        foreach ($words as $word) {
+            $this->assertTrue($this->StrUtility->islowerCase($word));
+        }
+    }
+
+    public function testIsLowerCaseCanReturnTheFalseValueIfGivenWordIsNotLowerCase()
+    {
+        $words = [
+            'lorem ipsuM',
+            'foo Barbaz66',
+            '66 fOo bar',
+            'bazBbar',
+            'baz-Bbar',
+            'baz_Bbar',
+        ];
+
+        foreach ($words as $word) {
+            $this->assertFalse($this->StrUtility->islowerCase($word));
+        }
+    }
+
+    public function testIsUpperCaseCanReturnTheTrueValueIfGivenWordIsUpperCase()
+    {
+        $words = [
+            'LOREMIPSUM',
+            'FOOBARBAZ',
+        ];
+
+        foreach ($words as $word) {
+            $this->assertTrue($this->StrUtility->isUpperCase($word));
+        }
+    }
+
+    public function testIsUpperCaseCanReturnTheFalseValueIfGivenStringIsNotUpperCase()
+    {
+        $words = [
+            'LoremipsuM',
+            'FoOBarbaz66',
+            '66fOobaR',
+            'bazBbar',
+            'baz-Bbar',
+            'baz_Bbar',
+        ];
+
+        foreach ($words as $word) {
+            $this->assertFalse($this->StrUtility->isUpperCase($word));
+        }
+    }
+
+    public function testIsTitleCaseCanReturnTheTrueValueIfGivenWordIsTitleCase()
+    {
+        $words = [
+            'Loremipsum',
+            'Foobarbaz',
+        ];
+
+        foreach ($words as $word) {
+            $this->assertTrue($this->StrUtility->isTitleCase($word));
+        }
+    }
+
+    public function testIsTitleCaseCanReturnTheFalseValueIfGivenWordIsNotTitleCase()
+    {
+        $words = [
+            'aoremipsum',
+            'foobarbaz',
+        ];
+
+        foreach ($words as $word) {
+            $this->assertFalse($this->StrUtility->isTitleCase($word));
+        }
+    }
+
+    public function testIsSnakeCaseCanReturnTheTrueValueIfGivenWordIsSnakeCase()
+    {
+        $words = [
+            'lorem_ipsum',
+            'foo_bar_baz',
+        ];
+
+        foreach ($words as $word) {
+            $this->assertTrue($this->StrUtility->isSnakeCase($word));
+        }
+    }
+
+    public function testIsSnakeCaseCanReturnTheFalseValueIfGivenWordIsNotSnakeCase()
+    {
+        $words = [
+            'UPPERCASE',
+            'Lorem-ipsum',
+            'lorem-ipsum',
+            '347865783',
+        ];
+
+        foreach ($words as $word) {
+            $this->assertFalse($this->StrUtility->isSnakeCase($word));
+        }
+    }
+
+    public function testValidateUserNameCanReturnTrueIfGivenUserNameIsValid()
+    {
+        $userNames = [
+            'jonhDoe',
+            '__jonhDoe',
+            '_-jonh-Doe66_',
+            '__jonh-Doe66__',
+            'jonh_Doe___-.',
+            'jonh__Doe',
+            'jonh_Doe',
+            'jonhDoe_66',
+            '.-jonh_Doe_66',
+            'jonh_Doe_66',
+            'jonh_Doe-66-Foo_B_',
+            '_.john._66',
+        ];
+
+        foreach ($userNames as $userName) {
+            $userName = $this->StrUtility->validateUserName($userName);
+            $this->assertTrue($userName);
+        }
+    }
+
+    public function testValidateUserNameCanReturnFalseIfGivenUserNameIsNotValid()
+    {
+        $userNames = [
+            'jonhDoe_______________98',
+            '__jonhDoe__@',
+            '!@_-jonh-Doe66_',
+            '__jon@h-Doe66__',
+            'jonh_Doe___-.!',
+            'jqw$..onh__Doe',
+        ];
+
+        foreach ($userNames as $userName) {
+            $userName = $this->StrUtility->validateUserName($userName);
+            $this->assertFalse($userName);
+        }
+    }
+
+    public function testHumanFileSizeCanConvertBytesToKB()
+    {
+        $this->assertEquals('1.00 KB', $this->StrUtility->humanFileSize(1024, 'KB'));
+    }
+
+    public function testHumanFileSizeCanConvertBytesToMB()
+    {
+        $this->assertEquals('1.00 MB', $this->StrUtility->humanFileSize(1024 * 1024, 'MB'));
+    }
+
+    public function testHumanFileSizeCanConvertBytesToGB()
+    {
+        $this->assertEquals('1.00 GB', $this->StrUtility->humanFileSize(1024 * 1024 * 1024, 'GB'));
+    }
+
+    public function testHumanFileSizeCanConvertBytesToTB()
+    {
+        $this->assertEquals('1.00 TB', $this->StrUtility->humanFileSize(1024 * 1024 * 1024 * 1024, 'TB'));
+    }
+
+    public function testHumanFileSizeCanInvalidTypeThrowsException()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->StrUtility->humanFileSize(1024, 'XYZ');
+    }
+
+    public function testNegativeSizeThrowsException()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->StrUtility->humanFileSize(-1024, 'KB');
     }
 }
