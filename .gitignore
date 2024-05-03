@@ -4,3 +4,5 @@ vendor/
 .phpunit.result.cache
 lang/
 index.php
+coverage/
+coverage-report/
