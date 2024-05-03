@@ -10,7 +10,7 @@ also you can use them as utilities class.
 
 ## Requirements
 
-- PHP 8 or higher
+- PHP 8.1 or higher
 
 ## Installation
 
@@ -26,7 +26,7 @@ you can use String helper methods as static so usage like the following:
 First Using The StrUtility Class:
 
 ```php
-use PhpStringHelpers\Facade\StrUtility;
+use dvlpr1996\PhpStringHelpers\Facade\StrUtility;
 ```
 
 <br>
@@ -377,6 +377,38 @@ StrUtility::before(string $string, string $search): string
 
 ```php
 StrUtility::hasSpace(string $string): bool
+```
+
+```php
+StrUtility::isEmail(string $email): bool
+```
+
+```php
+StrUtility::detectCase(string $word): string
+```
+
+```php
+StrUtility::isLowerCase(string $word): bool
+```
+
+```php
+StrUtility::isUpperCase(string $word): bool
+```
+
+```php
+StrUtility::isTitleCase(string $word): bool
+```
+
+```php
+StrUtility::isSnakeCase(string $word): bool
+```
+
+```php
+StrUtility::validateUserName(string $userName, int $min = 3, int $max = 20): bool
+```
+
+```php
+StrUtility::humanFileSize(int $size, string $type = 'KB'): string
 ```
 
 ## StrUtility usage as helper functions
