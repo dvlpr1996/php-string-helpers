@@ -11,7 +11,7 @@ class FileDoesNotExistsException extends Exception
         parent::__construct($message, $statusCode, $previous);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return __CLASS__ . ' : ' . $this->message;
     }
