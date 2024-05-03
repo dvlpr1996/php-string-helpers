@@ -10,11 +10,11 @@
 
 declare(strict_types=1);
 
-namespace PhpStringHelpers\Facade;
+namespace dvlpr1996\PhpStringHelpers\Facade;
 
-use PhpStringHelpers\Facade\Facade;
+use dvlpr1996\PhpStringHelpers\Facade\Facade;
 
 class StrUtility extends Facade
 {
-    protected static $getFacadeName = '\PhpStringHelpers\utility\StrUtility';
+    protected static $getFacadeName = 'dvlpr1996\PhpStringHelpers\utility\StrUtility';
 }

@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace PhpStringHelpers\Facade;
+namespace dvlpr1996\PhpStringHelpers\Facade;
 
 use RuntimeException;
 

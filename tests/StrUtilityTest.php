@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PhpStringHelpers\Tests;
+namespace dvlpr1996\PhpStringHelpers\Tests;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use PhpStringHelpers\utility\StrUtility;
-use PhpStringHelpers\exceptions\UrlIsNotValidException;
-use PhpStringHelpers\exceptions\FileDoesNotExistsException;
-use PhpStringHelpers\exceptions\LanguageFileIsNotArrayException;
+use dvlpr1996\PhpStringHelpers\utility\StrUtility;
+use dvlpr1996\PhpStringHelpers\exceptions\UrlIsNotValidException;
+use dvlpr1996\PhpStringHelpers\exceptions\FileDoesNotExistsException;
+use dvlpr1996\PhpStringHelpers\exceptions\LanguageFileIsNotArrayException;
 
 /**
  * @covers StrUtility

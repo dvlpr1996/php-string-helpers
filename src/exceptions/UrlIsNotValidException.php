@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpStringHelpers\exceptions;
+namespace dvlpr1996\PhpStringHelpers\exceptions;
 
 use Exception;
 

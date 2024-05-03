@@ -10,12 +10,12 @@
 
 declare(strict_types=1);
 
-namespace PhpStringHelpers\utility;
+namespace dvlpr1996\PhpStringHelpers\utility;
 
 use InvalidArgumentException;
-use PhpStringHelpers\exceptions\UrlIsNotValidException;
-use PhpStringHelpers\exceptions\FileDoesNotExistsException;
-use PhpStringHelpers\exceptions\LanguageFileIsNotArrayException;
+use dvlpr1996\PhpStringHelpers\exceptions\UrlIsNotValidException;
+use dvlpr1996\PhpStringHelpers\exceptions\FileDoesNotExistsException;
+use dvlpr1996\PhpStringHelpers\exceptions\LanguageFileIsNotArrayException;
 
 class StrUtility
 {
@@ -890,7 +890,7 @@ class StrUtility
      * @param string $email
      * @return bool
      */
-    public function isEmail(string $email)
+    public function isEmail(string $email): bool
     {
         return (bool) filter_var($email, FILTER_VALIDATE_EMAIL);
     }
