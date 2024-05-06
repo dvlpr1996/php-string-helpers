@@ -2,6 +2,36 @@
 
 All notable changes to `dvlpr1996/php-string-helpers` will be documented in this file
 
+## 3.0.0(2024-05-06)
+
+### Added
+Add new methods
+
+- StrUtility::isEmail(string $email): bool
+- StrUtility::detectCase(string $word): string
+- StrUtility::isLowerCase(string $word): bool
+- StrUtility::isUpperCase(string $word): bool
+- StrUtility::isTitleCase(string $word): bool
+- StrUtility::isSnakeCase(string $word): bool
+- StrUtility::validateUserName(string $userName, int $min = 3, int $max = 20): bool
+- StrUtility::humanFileSize(int $size, string $type = 'KB'): string
+
+
+### Changed
+- Updated composer.json schema for namespaces to improve package organization.
+
+### Deprecated
+None
+
+### Removed
+None
+
+### Fixed
+None
+
+### Security
+None
+
 ## 2.0.1(2023-05-22)
 
 fix StrUtility::translate() method bug
